@@ -15,6 +15,8 @@ namespace VehicleRentalSystem.Component1.ViewModels
     {
         private Vehicle _selectedVehicle;
         private RentalRecord _selectedRentalRecord;
+        private string _vehicleSearchText;
+        private string _rentalSearchText;
         private readonly JsonPersistenceService _persistenceService;
         private readonly VehicleRepository _vehicleRepository;
         private readonly RentalRecordRepository _rentalRecordRepository;
@@ -28,6 +30,38 @@ namespace VehicleRentalSystem.Component1.ViewModels
         public ObservableCollection<Vehicle> Vehicles { get; }
 
         public ObservableCollection<RentalRecord> RentalRecords { get; }
+
+        public string VehicleSearchText
+        {
+            get => _vehicleSearchText;
+            set
+            {
+                if (_vehicleSearchText == value)
+                {
+                    return;
+                }
+
+                _vehicleSearchText = value;
+                OnPropertyChanged();
+                System.Windows.Data.CollectionViewSource.GetDefaultView(Vehicles).Refresh();
+            }
+        }
+
+        public string RentalSearchText
+        {
+            get => _rentalSearchText;
+            set
+            {
+                if (_rentalSearchText == value)
+                {
+                    return;
+                }
+
+                _rentalSearchText = value;
+                OnPropertyChanged();
+                System.Windows.Data.CollectionViewSource.GetDefaultView(RentalRecords).Refresh();
+            }
+        }
 
         public Vehicle SelectedVehicle
         {
@@ -93,6 +127,8 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _rentalRecordsFilePath = System.IO.Path.Combine(dataDirectory, "rentalRecords.json");
 
             LoadData();
+            System.Windows.Data.CollectionViewSource.GetDefaultView(Vehicles).Filter = FilterVehicle;
+            System.Windows.Data.CollectionViewSource.GetDefaultView(RentalRecords).Filter = FilterRentalRecord;
 
             AddVehicleCommand = new RelayCommand(AddVehicle);
             EditVehicleCommand = new RelayCommand(EditVehicle);
@@ -109,6 +145,57 @@ namespace VehicleRentalSystem.Component1.ViewModels
             VehicleRedoCommand = new RelayCommand(RedoVehicle);
             RentalUndoCommand = new RelayCommand(UndoRental);
             RentalRedoCommand = new RelayCommand(RedoRental);
+        }
+
+        private bool FilterVehicle(object item)
+        {
+            if (string.IsNullOrWhiteSpace(VehicleSearchText))
+            {
+                return true;
+            }
+
+            Vehicle vehicle = item as Vehicle;
+
+            if (vehicle == null)
+            {
+                return false;
+            }
+
+            string searchText = VehicleSearchText.Trim();
+            return Contains(vehicle.LicensePlate, searchText)
+                || Contains(vehicle.Brand, searchText)
+                || Contains(vehicle.Model, searchText)
+                || Contains(vehicle.ProductionYear.ToString(), searchText)
+                || Contains(vehicle.FuelType.ToString(), searchText);
+        }
+
+        private bool FilterRentalRecord(object item)
+        {
+            if (string.IsNullOrWhiteSpace(RentalSearchText))
+            {
+                return true;
+            }
+
+            RentalRecord rentalRecord = item as RentalRecord;
+
+            if (rentalRecord == null)
+            {
+                return false;
+            }
+
+            string searchText = RentalSearchText.Trim();
+            return Contains(rentalRecord.VehicleId.ToString(), searchText)
+                || Contains(rentalRecord.RentalDate.ToString(), searchText)
+                || Contains(rentalRecord.DurationDays.ToString(), searchText)
+                || Contains(rentalRecord.TotalCost.ToString(), searchText)
+                || Contains(rentalRecord.MileageDriven.ToString(), searchText)
+                || Contains(rentalRecord.State.ToString(), searchText);
+        }
+
+        private bool Contains(string value, string searchText)
+        {
+            return value != null
+                && value.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private void LoadData()

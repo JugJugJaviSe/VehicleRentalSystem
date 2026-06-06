@@ -11,6 +11,7 @@
                 <Grid Margin="8">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -34,7 +35,13 @@
                                 Margin="0,0,8,0" />
                     </StackPanel>
 
-                    <DataGrid Grid.Row="1"
+                    <TextBox Grid.Row="1"
+                             Text="{Binding VehicleSearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,8"
+                             ToolTip="Search vehicles"
+                             MinHeight="24" />
+
+                    <DataGrid Grid.Row="2"
                               ItemsSource="{Binding Vehicles}"
                               SelectedItem="{Binding SelectedVehicle}"
                               AutoGenerateColumns="False"
@@ -58,6 +65,7 @@
             <TabItem Header="Rental Records">
                 <Grid Margin="8">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
@@ -91,7 +99,13 @@
                                 Margin="0,0,8,0" />
                     </StackPanel>
 
-                    <DataGrid Grid.Row="1"
+                    <TextBox Grid.Row="1"
+                             Text="{Binding RentalSearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,8"
+                             ToolTip="Search rental records"
+                             MinHeight="24" />
+
+                    <DataGrid Grid.Row="2"
                               ItemsSource="{Binding RentalRecords}"
                               SelectedItem="{Binding SelectedRentalRecord}"
                               AutoGenerateColumns="False"
