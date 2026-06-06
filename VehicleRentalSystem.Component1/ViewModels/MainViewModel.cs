@@ -4,6 +4,10 @@ using VehicleRentalSystem.Component1.Commands;
 using VehicleRentalSystem.Component1.Views;
 using VehicleRentalSystem.Models.Enums;
 using VehicleRentalSystem.Models.Models;
+using VehicleRentalSystem.Services.Commands;
+using VehicleRentalSystem.Services.Interfaces;
+using VehicleRentalSystem.Services.Repositories;
+using VehicleRentalSystem.Services.Services;
 
 namespace VehicleRentalSystem.Component1.ViewModels
 {
@@ -11,12 +15,13 @@ namespace VehicleRentalSystem.Component1.ViewModels
     {
         private Vehicle _selectedVehicle;
         private RentalRecord _selectedRentalRecord;
-        private readonly VehicleRentalSystem.Services.Services.JsonPersistenceService _persistenceService;
-        private readonly VehicleRentalSystem.Services.Repositories.VehicleRepository _vehicleRepository;
-        private readonly VehicleRentalSystem.Services.Repositories.RentalRecordRepository _rentalRecordRepository;
-        private readonly VehicleRentalSystem.Services.Commands.CommandHistoryManager _vehicleCommandHistoryManager;
-        private readonly VehicleRentalSystem.Services.Commands.CommandHistoryManager _rentalCommandHistoryManager;
-        private readonly VehicleRentalSystem.Services.Services.StateSimulationService _stateSimulationService;
+        private readonly JsonPersistenceService _persistenceService;
+        private readonly VehicleRepository _vehicleRepository;
+        private readonly RentalRecordRepository _rentalRecordRepository;
+        private readonly CommandHistoryManager _vehicleCommandHistoryManager;
+        private readonly CommandHistoryManager _rentalCommandHistoryManager;
+        private readonly StateSimulationService _stateSimulationService;
+        private readonly ILoggingService _loggingService;
         private readonly string _vehiclesFilePath;
         private readonly string _rentalRecordsFilePath;
 
@@ -70,17 +75,18 @@ namespace VehicleRentalSystem.Component1.ViewModels
         public RelayCommand RentalUndoCommand { get; }
         public RelayCommand RentalRedoCommand { get; }
 
-        public MainViewModel()
+        public MainViewModel(VehicleRentalSystem.Services.Interfaces.ILoggingService loggingService)
         {
+            _loggingService = loggingService ?? throw new ArgumentNullException(nameof(loggingService));
             Vehicles = new ObservableCollection<Vehicle>();
             RentalRecords = new ObservableCollection<RentalRecord>();
 
-            _persistenceService = new VehicleRentalSystem.Services.Services.JsonPersistenceService();
-            _vehicleRepository = new VehicleRentalSystem.Services.Repositories.VehicleRepository();
-            _rentalRecordRepository = new VehicleRentalSystem.Services.Repositories.RentalRecordRepository();
-            _vehicleCommandHistoryManager = new VehicleRentalSystem.Services.Commands.CommandHistoryManager();
-            _rentalCommandHistoryManager = new VehicleRentalSystem.Services.Commands.CommandHistoryManager();
-            _stateSimulationService = new VehicleRentalSystem.Services.Services.StateSimulationService();
+            _persistenceService = new JsonPersistenceService();
+            _vehicleRepository = new VehicleRepository();
+            _rentalRecordRepository = new RentalRecordRepository();
+            _vehicleCommandHistoryManager = new CommandHistoryManager();
+            _rentalCommandHistoryManager = new CommandHistoryManager();
+            _stateSimulationService = new StateSimulationService();
             string dataDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
             System.IO.Directory.CreateDirectory(dataDirectory);
             _vehiclesFilePath = System.IO.Path.Combine(dataDirectory, "vehicles.json");
@@ -171,11 +177,13 @@ namespace VehicleRentalSystem.Component1.ViewModels
                     FuelType = dialog.FuelType
                 };
 
-                VehicleRentalSystem.Services.Commands.IUndoableCommand command =
-                    new VehicleRentalSystem.Services.Commands.AddVehicleCommand(_vehicleRepository, vehicle);
+                IUndoableCommand command =
+                    new AddVehicleCommand(_vehicleRepository, vehicle);
                 _vehicleCommandHistoryManager.ExecuteCommand(command);
                 RefreshVehicles();
                 SaveData();
+                _loggingService.Log(
+                    $"Vehicle Added: {vehicle.Brand} {vehicle.Model} ({vehicle.LicensePlate})");
             }
         }
 
@@ -217,14 +225,16 @@ namespace VehicleRentalSystem.Component1.ViewModels
                     FuelType = dialog.FuelType
                 };
 
-                VehicleRentalSystem.Services.Commands.IUndoableCommand command =
-                    new VehicleRentalSystem.Services.Commands.UpdateVehicleCommand(
+                IUndoableCommand command =
+                    new UpdateVehicleCommand(
                         _vehicleRepository,
                         oldVehicle,
                         newVehicle);
                 _vehicleCommandHistoryManager.ExecuteCommand(command);
                 RefreshVehicles();
                 SaveData();
+                _loggingService.Log(
+                    $"Vehicle Edited: {newVehicle.Brand} {newVehicle.Model} ({newVehicle.LicensePlate})");
             }
         }
 
@@ -235,13 +245,16 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 return;
             }
 
-            VehicleRentalSystem.Services.Commands.IUndoableCommand command =
-                new VehicleRentalSystem.Services.Commands.DeleteVehicleCommand(
+            Vehicle vehicle = SelectedVehicle;
+            IUndoableCommand command =
+                new DeleteVehicleCommand(
                     _vehicleRepository,
-                    SelectedVehicle);
+                    vehicle);
             _vehicleCommandHistoryManager.ExecuteCommand(command);
             RefreshVehicles();
             SaveData();
+            _loggingService.Log(
+                $"Vehicle Deleted: {vehicle.Brand} {vehicle.Model} ({vehicle.LicensePlate})");
         }
 
         private void AddRentalRecord()
@@ -264,13 +277,14 @@ namespace VehicleRentalSystem.Component1.ViewModels
                     State = dialog.SelectedState
                 };
 
-                VehicleRentalSystem.Services.Commands.IUndoableCommand command =
-                    new VehicleRentalSystem.Services.Commands.AddRentalRecordCommand(
+                IUndoableCommand command =
+                    new AddRentalRecordCommand(
                         _rentalRecordRepository,
                         rentalRecord);
                 _rentalCommandHistoryManager.ExecuteCommand(command);
                 RefreshRentalRecords();
                 SaveData();
+                _loggingService.Log($"RentalRecord Added: Id={rentalRecord.Id}");
             }
         }
 
@@ -316,14 +330,15 @@ namespace VehicleRentalSystem.Component1.ViewModels
                     State = dialog.SelectedState
                 };
 
-                VehicleRentalSystem.Services.Commands.IUndoableCommand command =
-                    new VehicleRentalSystem.Services.Commands.UpdateRentalRecordCommand(
+                IUndoableCommand command =
+                    new UpdateRentalRecordCommand(
                         _rentalRecordRepository,
                         oldRentalRecord,
                         newRentalRecord);
                 _rentalCommandHistoryManager.ExecuteCommand(command);
                 RefreshRentalRecords();
                 SaveData();
+                _loggingService.Log($"RentalRecord Edited: Id={newRentalRecord.Id}");
             }
         }
 
@@ -334,37 +349,45 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 return;
             }
 
-            VehicleRentalSystem.Services.Commands.IUndoableCommand command =
-                new VehicleRentalSystem.Services.Commands.DeleteRentalRecordCommand(
+            RentalRecord rentalRecord = SelectedRentalRecord;
+            IUndoableCommand command =
+                new DeleteRentalRecordCommand(
                     _rentalRecordRepository,
-                    SelectedRentalRecord);
+                    rentalRecord);
             _rentalCommandHistoryManager.ExecuteCommand(command);
             RefreshRentalRecords();
             SaveData();
+            _loggingService.Log($"RentalRecord Deleted: Id={rentalRecord.Id}");
         }
 
         private void CompleteRental()
         {
             ApplyRentalTransition(
                 rentalRecord => _stateSimulationService.CompleteRental(rentalRecord),
-                "Completing this rental is not allowed in its current state.");
+                "Completing this rental is not allowed in its current state.",
+                "Rental Completed");
         }
 
         private void CancelRental()
         {
             ApplyRentalTransition(
                 rentalRecord => _stateSimulationService.CancelRental(rentalRecord),
-                "Cancelling this rental is not allowed in its current state.");
+                "Cancelling this rental is not allowed in its current state.",
+                "Rental Cancelled");
         }
 
         private void MarkOverdue()
         {
             ApplyRentalTransition(
                 rentalRecord => _stateSimulationService.MarkAsOverdue(rentalRecord),
-                "Marking this rental as overdue is not allowed in its current state.");
+                "Marking this rental as overdue is not allowed in its current state.",
+                "Rental Marked Overdue");
         }
 
-        private void ApplyRentalTransition(Action<RentalRecord> transition, string invalidTransitionMessage)
+        private void ApplyRentalTransition(
+            Action<RentalRecord> transition,
+            string invalidTransitionMessage,
+            string actionDescription)
         {
             if (SelectedRentalRecord == null)
             {
@@ -391,6 +414,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
             System.Windows.Data.CollectionViewSource.GetDefaultView(RentalRecords).Refresh();
             SaveData();
+            _loggingService.Log($"{actionDescription}: Id={SelectedRentalRecord.Id}");
         }
 
         private void UndoVehicle()
@@ -403,6 +427,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _vehicleCommandHistoryManager.Undo();
             RefreshVehicles();
             SaveData();
+            _loggingService.Log("Vehicle Undo Executed");
         }
 
         private void RedoVehicle()
@@ -415,6 +440,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _vehicleCommandHistoryManager.Redo();
             RefreshVehicles();
             SaveData();
+            _loggingService.Log("Vehicle Redo Executed");
         }
 
         private void UndoRental()
@@ -427,6 +453,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _rentalCommandHistoryManager.Undo();
             RefreshRentalRecords();
             SaveData();
+            _loggingService.Log("Rental Undo Executed");
         }
 
         private void RedoRental()
@@ -439,6 +466,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _rentalCommandHistoryManager.Redo();
             RefreshRentalRecords();
             SaveData();
+            _loggingService.Log("Rental Redo Executed");
         }
     }
 }
