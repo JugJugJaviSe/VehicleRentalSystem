@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{99D82590-F07C-486B-94E9-56C170EC07FE}</ProjectGuid>
+    <ProjectGuid>{5FA78385-C14B-4A43-A265-DD50C7814BFA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>VehicleRentalSystem.Component1</RootNamespace>
     <AssemblyName>VehicleRentalSystem.Component1</AssemblyName>
@@ -53,8 +53,19 @@
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\VehicleDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RentalRecordDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -67,7 +78,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="Views\VehicleDialog.xaml.cs">
+      <DependentUpon>VehicleDialog.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\RentalRecordDialog.xaml.cs">
+      <DependentUpon>RentalRecordDialog.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -94,6 +112,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VehicleRentalSystem.Models\VehicleRentalSystem.Models.csproj">
+      <Project>{2925e404-c58f-4f72-84d0-235ea5eab068}</Project>
+      <Name>VehicleRentalSystem.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VehicleRentalSystem.Services\VehicleRentalSystem.Services.csproj">
+      <Project>{0e2fe98c-41d4-4f75-894b-6fecca413b02}</Project>
+      <Name>VehicleRentalSystem.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converters\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
