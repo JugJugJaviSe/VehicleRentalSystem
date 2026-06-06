@@ -45,9 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AddVehicleCommand.cs" />
+    <Compile Include="Commands\AddRentalRecordCommand.cs" />
     <Compile Include="Commands\CommandHistoryManager.cs" />
+    <Compile Include="Commands\DeleteRentalRecordCommand.cs" />
     <Compile Include="Commands\DeleteVehicleCommand.cs" />
     <Compile Include="Commands\IUndoableCommand.cs" />
+    <Compile Include="Commands\UpdateRentalRecordCommand.cs" />
     <Compile Include="Commands\UpdateVehicleCommand.cs" />
     <Compile Include="Interfaces\IRentalRecordRepository.cs" />
     <Compile Include="Interfaces\IVehicleRepository.cs" />

@@ -112,6 +112,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="Data\rentalRecords.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\vehicles.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VehicleRentalSystem.Models\VehicleRentalSystem.Models.csproj">
