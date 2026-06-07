@@ -1,6 +1,7 @@
 <Window x:Class="VehicleRentalSystem.Component1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         Title="Vehicle Rental System"
         Height="700"
         Width="1200">
@@ -129,11 +130,37 @@
             </TabItem>
 
             <TabItem Header="Statistics">
-                <Grid>
-                    <TextBlock Text="Statistics will be implemented here."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="18" />
+                <Grid Margin="16"
+                      DataContext="{Binding Statistics}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <lvc:PieChart Grid.Column="0"
+                                  Series="{Binding Series}"
+                                  LegendPosition="Right" />
+
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Margin="24">
+                        <TextBlock Text="Rental State Counts"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,16" />
+                        <TextBlock Text="{Binding ActiveCount, StringFormat=Active: {0}}"
+                                   FontSize="16"
+                                   Margin="0,4" />
+                        <TextBlock Text="{Binding CompletedCount, StringFormat=Completed: {0}}"
+                                   FontSize="16"
+                                   Margin="0,4" />
+                        <TextBlock Text="{Binding CancelledCount, StringFormat=Cancelled: {0}}"
+                                   FontSize="16"
+                                   Margin="0,4" />
+                        <TextBlock Text="{Binding OverdueCount, StringFormat=Overdue: {0}}"
+                                   FontSize="16"
+                                   Margin="0,4" />
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>

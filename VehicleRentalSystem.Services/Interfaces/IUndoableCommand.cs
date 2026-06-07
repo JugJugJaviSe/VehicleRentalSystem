@@ -1,4 +1,4 @@
-namespace VehicleRentalSystem.Services.Commands
+namespace VehicleRentalSystem.Services.Interfaces
 {
     public interface IUndoableCommand
     {

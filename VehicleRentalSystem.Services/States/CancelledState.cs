@@ -1,4 +1,5 @@
 using VehicleRentalSystem.Models.Enums;
+using VehicleRentalSystem.Services.Interfaces;
 
 namespace VehicleRentalSystem.Services.States
 {

@@ -1,4 +1,4 @@
-namespace VehicleRentalSystem.Services.States
+namespace VehicleRentalSystem.Services.Interfaces
 {
     public interface ICancelableState : IRentalState
     {

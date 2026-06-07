@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using VehicleRentalSystem.Services.Interfaces;
 
 namespace VehicleRentalSystem.Services.Commands
 {

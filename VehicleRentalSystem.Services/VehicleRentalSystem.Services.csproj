@@ -49,11 +49,15 @@
     <Compile Include="Commands\CommandHistoryManager.cs" />
     <Compile Include="Commands\DeleteRentalRecordCommand.cs" />
     <Compile Include="Commands\DeleteVehicleCommand.cs" />
-    <Compile Include="Commands\IUndoableCommand.cs" />
     <Compile Include="Commands\UpdateRentalRecordCommand.cs" />
     <Compile Include="Commands\UpdateVehicleCommand.cs" />
     <Compile Include="Interfaces\IRentalRecordRepository.cs" />
     <Compile Include="Interfaces\ILoggingService.cs" />
+    <Compile Include="Interfaces\ICancelableState.cs" />
+    <Compile Include="Interfaces\ICompletableState.cs" />
+    <Compile Include="Interfaces\IOverduableState.cs" />
+    <Compile Include="Interfaces\IRentalState.cs" />
+    <Compile Include="Interfaces\IUndoableCommand.cs" />
     <Compile Include="Interfaces\IVehicleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RentalRecordRepository.cs" />
@@ -64,10 +68,6 @@
     <Compile Include="States\ActiveState.cs" />
     <Compile Include="States\CancelledState.cs" />
     <Compile Include="States\CompletedState.cs" />
-    <Compile Include="States\ICancelableState.cs" />
-    <Compile Include="States\ICompletableState.cs" />
-    <Compile Include="States\IRentalState.cs" />
-    <Compile Include="States\IOverduableState.cs" />
     <Compile Include="States\OverdueState.cs" />
     <Compile Include="States\RentalContext.cs" />
   </ItemGroup>

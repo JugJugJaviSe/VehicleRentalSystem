@@ -1,4 +1,5 @@
 using VehicleRentalSystem.Models.Models;
+using VehicleRentalSystem.Services.Interfaces;
 using VehicleRentalSystem.Services.States;
 
 namespace VehicleRentalSystem.Services.Services

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows.Data;
 using VehicleRentalSystem.Component1.Commands;
+using VehicleRentalSystem.Component1.Observers;
 using VehicleRentalSystem.Component1.Views;
 using VehicleRentalSystem.Models.Enums;
 using VehicleRentalSystem.Models.Models;
@@ -24,12 +27,14 @@ namespace VehicleRentalSystem.Component1.ViewModels
         private readonly CommandHistoryManager _rentalCommandHistoryManager;
         private readonly StateSimulationService _stateSimulationService;
         private readonly ILoggingService _loggingService;
+        private readonly RentalStatisticsSubject _rentalStatisticsSubject;
         private readonly string _vehiclesFilePath;
         private readonly string _rentalRecordsFilePath;
 
         public ObservableCollection<Vehicle> Vehicles { get; }
 
         public ObservableCollection<RentalRecord> RentalRecords { get; }
+        public StatisticsViewModel Statistics { get; }
 
         public string VehicleSearchText
         {
@@ -122,13 +127,16 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _rentalCommandHistoryManager = new CommandHistoryManager();
             _stateSimulationService = new StateSimulationService();
             string dataDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-            System.IO.Directory.CreateDirectory(dataDirectory);
+            Directory.CreateDirectory(dataDirectory);
             _vehiclesFilePath = System.IO.Path.Combine(dataDirectory, "vehicles.json");
             _rentalRecordsFilePath = System.IO.Path.Combine(dataDirectory, "rentalRecords.json");
 
             LoadData();
-            System.Windows.Data.CollectionViewSource.GetDefaultView(Vehicles).Filter = FilterVehicle;
-            System.Windows.Data.CollectionViewSource.GetDefaultView(RentalRecords).Filter = FilterRentalRecord;
+            CollectionViewSource.GetDefaultView(Vehicles).Filter = FilterVehicle;
+            CollectionViewSource.GetDefaultView(RentalRecords).Filter = FilterRentalRecord;
+            _rentalStatisticsSubject = new RentalStatisticsSubject();
+            Statistics = new StatisticsViewModel(RentalRecords);
+            _rentalStatisticsSubject.RegisterObserver(Statistics);
 
             AddVehicleCommand = new RelayCommand(AddVehicle);
             EditVehicleCommand = new RelayCommand(EditVehicle);
@@ -371,6 +379,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 _rentalCommandHistoryManager.ExecuteCommand(command);
                 RefreshRentalRecords();
                 SaveData();
+                _rentalStatisticsSubject.NotifyObservers();
                 _loggingService.Log($"RentalRecord Added: Id={rentalRecord.Id}");
             }
         }
@@ -425,6 +434,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 _rentalCommandHistoryManager.ExecuteCommand(command);
                 RefreshRentalRecords();
                 SaveData();
+                _rentalStatisticsSubject.NotifyObservers();
                 _loggingService.Log($"RentalRecord Edited: Id={newRentalRecord.Id}");
             }
         }
@@ -444,6 +454,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _rentalCommandHistoryManager.ExecuteCommand(command);
             RefreshRentalRecords();
             SaveData();
+            _rentalStatisticsSubject.NotifyObservers();
             _loggingService.Log($"RentalRecord Deleted: Id={rentalRecord.Id}");
         }
 
@@ -501,6 +512,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
             System.Windows.Data.CollectionViewSource.GetDefaultView(RentalRecords).Refresh();
             SaveData();
+            _rentalStatisticsSubject.NotifyObservers();
             _loggingService.Log($"{actionDescription}: Id={SelectedRentalRecord.Id}");
         }
 
@@ -540,6 +552,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _rentalCommandHistoryManager.Undo();
             RefreshRentalRecords();
             SaveData();
+            _rentalStatisticsSubject.NotifyObservers();
             _loggingService.Log("Rental Undo Executed");
         }
 
@@ -553,6 +566,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _rentalCommandHistoryManager.Redo();
             RefreshRentalRecords();
             SaveData();
+            _rentalStatisticsSubject.NotifyObservers();
             _loggingService.Log("Rental Redo Executed");
         }
     }
