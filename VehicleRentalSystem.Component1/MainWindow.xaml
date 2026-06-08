@@ -8,7 +8,8 @@
 
     <Grid Margin="10">
         <TabControl>
-            <TabItem Header="Vehicles">
+            <TabItem Header="Vehicles"
+                     DataContext="{Binding VehicleManagement}">
                 <Grid Margin="8">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -29,10 +30,10 @@
                                 Command="{Binding DeleteVehicleCommand}"
                                 Margin="0,0,8,0" />
                         <Button Content="Undo"
-                                Command="{Binding VehicleUndoCommand}"
+                                Command="{Binding UndoVehicleCommand}"
                                 Margin="16,0,8,0" />
                         <Button Content="Redo"
-                                Command="{Binding VehicleRedoCommand}"
+                                Command="{Binding RedoVehicleCommand}"
                                 Margin="0,0,8,0" />
                     </StackPanel>
 
@@ -43,11 +44,13 @@
                              MinHeight="24" />
 
                     <DataGrid Grid.Row="2"
-                              ItemsSource="{Binding Vehicles}"
+                              ItemsSource="{Binding VehiclesView}"
                               SelectedItem="{Binding SelectedVehicle}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
                         <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id"
+                                                Binding="{Binding Id}" />
                             <DataGridTextColumn Header="License Plate"
                                                 Binding="{Binding LicensePlate}" />
                             <DataGridTextColumn Header="Brand"
@@ -58,12 +61,15 @@
                                                 Binding="{Binding ProductionYear}" />
                             <DataGridTextColumn Header="Fuel"
                                                 Binding="{Binding FuelType}" />
+                            <DataGridCheckBoxColumn Header="Available"
+                                                    Binding="{Binding IsAvailable}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Rental Records">
+            <TabItem Header="Rental Records"
+                     DataContext="{Binding RentalManagement}">
                 <Grid Margin="8">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -83,20 +89,11 @@
                         <Button Content="Delete Rental"
                                 Command="{Binding DeleteRentalRecordCommand}"
                                 Margin="0,0,8,0" />
-                        <Button Content="Complete Rental"
-                                Command="{Binding CompleteRentalCommand}"
-                                Margin="16,0,8,0" />
-                        <Button Content="Cancel Rental"
-                                Command="{Binding CancelRentalCommand}"
-                                Margin="0,0,8,0" />
-                        <Button Content="Mark Overdue"
-                                Command="{Binding MarkOverdueCommand}"
-                                Margin="0,0,8,0" />
                         <Button Content="Undo"
-                                Command="{Binding RentalUndoCommand}"
+                                Command="{Binding UndoRentalCommand}"
                                 Margin="16,0,8,0" />
                         <Button Content="Redo"
-                                Command="{Binding RentalRedoCommand}"
+                                Command="{Binding RedoRentalCommand}"
                                 Margin="0,0,8,0" />
                     </StackPanel>
 
@@ -107,11 +104,13 @@
                              MinHeight="24" />
 
                     <DataGrid Grid.Row="2"
-                              ItemsSource="{Binding RentalRecords}"
+                              ItemsSource="{Binding RentalRecordsView}"
                               SelectedItem="{Binding SelectedRentalRecord}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
                         <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id"
+                                                Binding="{Binding Id}" />
                             <DataGridTextColumn Header="Vehicle Id"
                                                 Binding="{Binding VehicleId}" />
                             <DataGridTextColumn Header="Rental Date"

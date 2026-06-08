@@ -5,6 +5,9 @@ namespace VehicleRentalSystem.Services.States
 {
     public class CompletedState : IRentalState
     {
-        public RentalState StateType => RentalState.Completed;
+        public RentalState ChangeTo(RentalState requestedState)
+        {
+            return RentalState.Completed;
+        }
     }
 }

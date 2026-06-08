@@ -11,5 +11,6 @@ namespace VehicleRentalSystem.Models.Models
         public string Model { get; set; }
         public int ProductionYear { get; set; }
         public FuelType FuelType { get; set; }
+        public bool IsAvailable { get; set; } = true;
     }
 }

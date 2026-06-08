@@ -1,4 +1,5 @@
-using VehicleRentalSystem.Models.Models;
+using System;
+using VehicleRentalSystem.Models.Enums;
 using VehicleRentalSystem.Services.Interfaces;
 using VehicleRentalSystem.Services.States;
 
@@ -6,48 +7,28 @@ namespace VehicleRentalSystem.Services.Services
 {
     public class StateSimulationService
     {
-        public void CompleteRental(RentalRecord rentalRecord)
+        public RentalState GetNextState(
+            RentalState currentState,
+            RentalState requestedState)
         {
-            if (rentalRecord == null)
-            {
-                return;
-            }
-
-            RentalContext context = new RentalContext(rentalRecord);
-
-            if (context.CurrentState is ICompletableState completable)
-            {
-                context.SetState(completable.Complete());
-            }
+            IRentalState state = CreateState(currentState);
+            return state.ChangeTo(requestedState);
         }
 
-        public void MarkAsOverdue(RentalRecord rentalRecord)
+        private IRentalState CreateState(RentalState state)
         {
-            if (rentalRecord == null)
+            switch (state)
             {
-                return;
-            }
-
-            RentalContext context = new RentalContext(rentalRecord);
-
-            if (context.CurrentState is IOverduableState overduable)
-            {
-                context.SetState(overduable.MarkAsOverdue());
-            }
-        }
-
-        public void CancelRental(RentalRecord rentalRecord)
-        {
-            if (rentalRecord == null)
-            {
-                return;
-            }
-
-            RentalContext context = new RentalContext(rentalRecord);
-
-            if (context.CurrentState is ICancelableState cancelable)
-            {
-                context.SetState(cancelable.Cancel());
+                case RentalState.Active:
+                    return new ActiveState();
+                case RentalState.Overdue:
+                    return new OverdueState();
+                case RentalState.Completed:
+                    return new CompletedState();
+                case RentalState.Cancelled:
+                    return new CancelledState();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state));
             }
         }
     }

@@ -3,18 +3,18 @@ using VehicleRentalSystem.Services.Interfaces;
 
 namespace VehicleRentalSystem.Services.States
 {
-    public class OverdueState : ICompletableState, ICancelableState
+    public class OverdueState : IRentalState
     {
-        public RentalState StateType => RentalState.Overdue;
-
-        public IRentalState Complete()
+        public RentalState ChangeTo(RentalState requestedState)
         {
-            return new CompletedState();
-        }
+            if (requestedState == RentalState.Overdue
+                || requestedState == RentalState.Completed
+                || requestedState == RentalState.Cancelled)
+            {
+                return requestedState;
+            }
 
-        public IRentalState Cancel()
-        {
-            return new CancelledState();
+            return RentalState.Overdue;
         }
     }
 }

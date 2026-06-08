@@ -4,6 +4,6 @@ namespace VehicleRentalSystem.Services.Interfaces
 {
     public interface IRentalState
     {
-        RentalState StateType { get; }
+        RentalState ChangeTo(RentalState requestedState);
     }
 }

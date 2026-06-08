@@ -5,6 +5,9 @@ namespace VehicleRentalSystem.Services.States
 {
     public class CancelledState : IRentalState
     {
-        public RentalState StateType => RentalState.Cancelled;
+        public RentalState ChangeTo(RentalState requestedState)
+        {
+            return RentalState.Cancelled;
+        }
     }
 }

@@ -53,9 +53,6 @@
     <Compile Include="Commands\UpdateVehicleCommand.cs" />
     <Compile Include="Interfaces\IRentalRecordRepository.cs" />
     <Compile Include="Interfaces\ILoggingService.cs" />
-    <Compile Include="Interfaces\ICancelableState.cs" />
-    <Compile Include="Interfaces\ICompletableState.cs" />
-    <Compile Include="Interfaces\IOverduableState.cs" />
     <Compile Include="Interfaces\IRentalState.cs" />
     <Compile Include="Interfaces\IUndoableCommand.cs" />
     <Compile Include="Interfaces\IVehicleRepository.cs" />
@@ -69,7 +66,6 @@
     <Compile Include="States\CancelledState.cs" />
     <Compile Include="States\CompletedState.cs" />
     <Compile Include="States\OverdueState.cs" />
-    <Compile Include="States\RentalContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VehicleRentalSystem.Models\VehicleRentalSystem.Models.csproj">

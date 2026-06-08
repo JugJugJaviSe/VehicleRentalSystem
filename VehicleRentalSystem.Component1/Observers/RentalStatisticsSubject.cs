@@ -6,7 +6,7 @@ namespace VehicleRentalSystem.Component1.Observers
     {
         private readonly List<IRentalObserver> _observers = new List<IRentalObserver>();
 
-        public void RegisterObserver(IRentalObserver observer)
+        public void     RegisterObserver(IRentalObserver observer)
         {
             if (observer != null && !_observers.Contains(observer))
             {

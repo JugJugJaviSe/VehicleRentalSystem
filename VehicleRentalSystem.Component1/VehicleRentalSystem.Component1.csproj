@@ -108,12 +108,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\SampleDataFactory.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\RentalRecordDialogViewModel.cs" />
+    <Compile Include="ViewModels\RentalManagementViewModel.cs" />
     <Compile Include="ViewModels\StatisticsViewModel.cs" />
+    <Compile Include="ViewModels\VehicleDialogViewModel.cs" />
+    <Compile Include="ViewModels\VehicleManagementViewModel.cs" />
+    <Compile Include="Helpers\RentalRecordSearchHelper.cs" />
+    <Compile Include="Helpers\VehicleSearchHelper.cs" />
     <Compile Include="Observers\IRentalObserver.cs" />
     <Compile Include="Observers\IRentalSubject.cs" />
     <Compile Include="Observers\RentalStatisticsSubject.cs" />
+    <Compile Include="Validators\RentalRecordValidator.cs" />
+    <Compile Include="Validators\ValidationResult.cs" />
+    <Compile Include="Validators\VehicleValidator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -189,7 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converters\" />
-    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SkiaSharp.NativeAssets.Win32.3.119.0\build\net462\SkiaSharp.NativeAssets.Win32.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.Win32.3.119.0\build\net462\SkiaSharp.NativeAssets.Win32.targets')" />
@@ -206,9 +215,7 @@
       <SkiaSharpNativeRuntimeAsset Include="..\packages\SkiaSharp.NativeAssets.Win32.3.119.0\runtimes\win-x64\native\libSkiaSharp.dll" />
       <SkiaSharpNativeRuntimeAsset Include="..\packages\HarfBuzzSharp.NativeAssets.Win32.8.3.1.1\runtimes\win-x64\native\libHarfBuzzSharp.dll" />
     </ItemGroup>
-    <Copy SourceFiles="@(SkiaSharpNativeRuntimeAsset)"
-          DestinationFolder="$(TargetDir)"
-          SkipUnchangedFiles="True" />
+    <Copy SourceFiles="@(SkiaSharpNativeRuntimeAsset)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="True" />
   </Target>
   <Target Name="CopyLiveChartsManagedRuntimeDependencies" AfterTargets="CopyFilesToOutputDirectory">
     <ItemGroup>
@@ -221,13 +228,9 @@
       <LiveChartsManagedRuntimeDependency Include="..\packages\System.Text.Json.8.0.5\lib\net462\System.Text.Json.dll" />
       <LiveChartsManagedRuntimeDependency Include="..\packages\HarfBuzzSharp.8.3.1.1\lib\net462\HarfBuzzSharp.dll" />
     </ItemGroup>
-    <Copy SourceFiles="@(LiveChartsManagedRuntimeDependency)"
-          DestinationFolder="$(TargetDir)"
-          SkipUnchangedFiles="True" />
+    <Copy SourceFiles="@(LiveChartsManagedRuntimeDependency)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="True" />
   </Target>
   <Target Name="CopyRuntimeBindingConfiguration" AfterTargets="CopyFilesToOutputDirectory">
-    <Copy SourceFiles="App.config"
-          DestinationFiles="$(TargetPath).config"
-          SkipUnchangedFiles="True" />
+    <Copy SourceFiles="App.config" DestinationFiles="$(TargetPath).config" SkipUnchangedFiles="True" />
   </Target>
 </Project>

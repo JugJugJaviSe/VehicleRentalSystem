@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Rental Record"
-        Height="400"
+        Height="480"
         Width="450"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
@@ -14,6 +14,8 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -33,6 +35,9 @@
                   Grid.Row="0"
                   Grid.Column="1"
                   DisplayMemberPath="LicensePlate"
+                  ItemsSource="{Binding Vehicles}"
+                  SelectedItem="{Binding SelectedVehicle}"
+                  IsEnabled="{Binding CanChangeVehicle}"
                   Margin="0,0,0,10" />
 
         <TextBlock Grid.Row="1"
@@ -43,49 +48,75 @@
         <DatePicker x:Name="RentalDatePicker"
                     Grid.Row="1"
                     Grid.Column="1"
+                    SelectedDate="{Binding RentalDate}"
                     Margin="0,0,0,10" />
 
         <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   Text="Rental Time (HH:mm)"
+                   VerticalAlignment="Center"
+                   Margin="0,0,12,10" />
+        <TextBox x:Name="RentalTimeTextBox"
+                 Grid.Row="2"
+                 Grid.Column="1"
+                 Text="{Binding RentalTimeText, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="0,0,0,10" />
+
+        <TextBlock Grid.Row="3"
                    Grid.Column="0"
                    Text="Duration Days"
                    VerticalAlignment="Center"
                    Margin="0,0,12,10" />
         <TextBox x:Name="DurationDaysTextBox"
-                 Grid.Row="2"
+                 Grid.Row="3"
                  Grid.Column="1"
+                 Text="{Binding DurationDaysText, UpdateSourceTrigger=PropertyChanged}"
                  Margin="0,0,0,10" />
 
-        <TextBlock Grid.Row="3"
+        <TextBlock Grid.Row="4"
                    Grid.Column="0"
                    Text="Total Cost"
                    VerticalAlignment="Center"
                    Margin="0,0,12,10" />
         <TextBox x:Name="TotalCostTextBox"
-                 Grid.Row="3"
+                 Grid.Row="4"
                  Grid.Column="1"
+                 Text="{Binding TotalCostText, UpdateSourceTrigger=PropertyChanged}"
                  Margin="0,0,0,10" />
 
-        <TextBlock Grid.Row="4"
+        <TextBlock Grid.Row="5"
                    Grid.Column="0"
                    Text="Mileage Driven"
                    VerticalAlignment="Center"
                    Margin="0,0,12,10" />
         <TextBox x:Name="MileageDrivenTextBox"
-                 Grid.Row="4"
+                 Grid.Row="5"
                  Grid.Column="1"
+                 Text="{Binding MileageDrivenText, UpdateSourceTrigger=PropertyChanged}"
                  Margin="0,0,0,10" />
 
-        <TextBlock Grid.Row="5"
+        <TextBlock Grid.Row="6"
                    Grid.Column="0"
                    Text="State"
                    VerticalAlignment="Center"
                    Margin="0,0,12,10" />
         <ComboBox x:Name="StateComboBox"
-                  Grid.Row="5"
+                  Grid.Row="6"
                   Grid.Column="1"
+                  ItemsSource="{Binding RentalStates}"
+                  SelectedItem="{Binding SelectedState}"
+                  IsEnabled="{Binding IsEditMode}"
                   Margin="0,0,0,10" />
 
-        <StackPanel Grid.Row="7"
+        <TextBlock x:Name="ValidationMessageTextBlock"
+                   Grid.Row="7"
+                   Grid.ColumnSpan="2"
+                   Foreground="Red"
+                   Text="{Binding ValidationMessage}"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,10" />
+
+        <StackPanel Grid.Row="9"
                     Grid.ColumnSpan="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
@@ -93,11 +124,11 @@
                     Width="80"
                     Margin="0,0,8,0"
                     IsDefault="True"
-                    Click="SaveButton_Click" />
+                    Command="{Binding SaveCommand}" />
             <Button Content="Cancel"
                     Width="80"
                     IsCancel="True"
-                    Click="CancelButton_Click" />
+                    Command="{Binding CancelCommand}" />
         </StackPanel>
     </Grid>
 </Window>

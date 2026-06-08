@@ -1,0 +1,538 @@
+<Project>
+  <Name>RVA Project</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Component 1</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Interface">
+        <Name>IUndoableCommand</Name>
+        <Access>Public</Access>
+        <Location left="1908" top="1308" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Execute()</Member>
+        <Member type="Method">void Undo()</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>CommandHistoryManager</Name>
+        <Access>Public</Access>
+        <Location left="1574" top="1308" />
+        <Size width="265" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly Stack&lt;IUndoableCommand&gt; _undoStack</Member>
+        <Member type="Field">private readonly Stack&lt;IUndoableCommand&gt; _redoStack</Member>
+        <Member type="Method">public void ExecuteCommand(IUndoableCommand command)</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Member type="Method">public void Redo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>AddRentalRecordCommand</Name>
+        <Access>Public</Access>
+        <Location left="2022" top="1630" />
+        <Size width="183" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IRentalRecordRepository _repository</Member>
+        <Member type="Field">private readonly RentalRecord _rentalRecord</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DeleteRentalRecordCommand</Name>
+        <Access>Public</Access>
+        <Location left="2215" top="1630" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IRentalRecordRepository _repository</Member>
+        <Member type="Field">private readonly RentalRecord _rentalRecord</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>UpdateRentalRecordCommand</Name>
+        <Access>Public</Access>
+        <Location left="2392" top="1630" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IRentalRecordRepository _repository</Member>
+        <Member type="Field">private readonly RentalRecord _oldRentalRecord</Member>
+        <Member type="Field">private readonly RentalRecord _newRentalRecord</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>AddVehicleCommand</Name>
+        <Access>Public</Access>
+        <Location left="1432" top="1630" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IVehicleRepository _repository</Member>
+        <Member type="Field">private readonly Vehicle _vehicle</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DeleteVehicleCommand</Name>
+        <Access>Public</Access>
+        <Location left="1780" top="1630" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IVehicleRepository _repository</Member>
+        <Member type="Field">private readonly IRentalRecordRepository _rentalRecordRepository</Member>
+        <Member type="Field">private readonly List&lt;RentalRecord&gt; _relatedRentalRecords</Member>
+        <Member type="Field">private readonly Vehicle _vehicle</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>UpdateVehicleCommand</Name>
+        <Access>Public</Access>
+        <Location left="1608" top="1630" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IVehicle _repository</Member>
+        <Member type="Field">private readonly Vehicle _oldVehicle</Member>
+        <Member type="Field">private readonly Vehicle _newVehicle</Member>
+        <Member type="Method">public void Execute()</Member>
+        <Member type="Method">public void Undo()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IVehicleRepository</Name>
+        <Access>Public</Access>
+        <Location left="1594" top="1926" />
+        <Size width="190" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">IEnumerable&lt;Vehicle&gt; GetAll()</Member>
+        <Member type="Method">Vehicle GetById(Guid id)</Member>
+        <Member type="Method">void Add(Vehicle vehicle)</Member>
+        <Member type="Method">void Update(Vehicle vehicle)</Member>
+        <Member type="Method">void Delete(Guid id)</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalRecordRepository</Name>
+        <Access>Public</Access>
+        <Location left="2159" top="1926" />
+        <Size width="277" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">IEnumerable&lt;RentalRecord&gt; GetAll()</Member>
+        <Member type="Method">RentalRecord GetById(Guid id)</Member>
+        <Member type="Method">void Add(RentalRecord rentalRecord)</Member>
+        <Member type="Method">void Update(RentalRecord rentalRecord)</Member>
+        <Member type="Method">void Delete(Guid id)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>VehicleRepository</Name>
+        <Access>Public</Access>
+        <Location left="1608" top="2211" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly List&lt;Vehicle&gt; _vehicles</Member>
+        <Member type="Constructor">public VehicleRepository()</Member>
+        <Member type="Method">public IEnumerable&lt;Vehicle&gt; GetAll()</Member>
+        <Member type="Method">public void GetById(Guid id)</Member>
+        <Member type="Method">public void Add(Vehicle vehicle)</Member>
+        <Member type="Method">public void Update(Vehicle vehicle)</Member>
+        <Member type="Method">public void Delete(Guid id)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>RentalRecordRepository</Name>
+        <Access>Public</Access>
+        <Location left="2191" top="2211" />
+        <Size width="221" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly List&lt;RentalRecords&gt; _rentalRecords</Member>
+        <Member type="Constructor">public RentalRecordRepository()</Member>
+        <Member type="Method">public IEnumerable&lt;RentalRecord&gt; GetAll()</Member>
+        <Member type="Method">public void GetById(Guid id)</Member>
+        <Member type="Method">public void Add(RentalRecord rentalRecord)</Member>
+        <Member type="Method">public void Update(RentalRecord rentalRecord)</Member>
+        <Member type="Method">public void Delete(Guid id)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Enum">
+        <Name>RentalState</Name>
+        <Access>Public</Access>
+        <Location left="518" top="1047" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Value>Active</Value>
+        <Value>Completed</Value>
+        <Value>Cancelled</Value>
+        <Value>Overdue</Value>
+      </Entity>
+      <Entity type="Class">
+        <Name>ActiveState</Name>
+        <Access>Public</Access>
+        <Location left="534" top="1343" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public RentalState ChangeTo(RentalState requestedState)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>OverdueState</Name>
+        <Access>Public</Access>
+        <Location left="722" top="1343" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public RentalState ChangeTo(RentalState requestedState)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>CancelledState</Name>
+        <Access>Public</Access>
+        <Location left="1094" top="1343" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public RentalState ChangeTo(RentalState requestedState)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalState</Name>
+        <Access>Public</Access>
+        <Location left="752" top="1047" />
+        <Size width="309" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">RentalState ChangeTo(RentalState requestedState)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>CompletedState</Name>
+        <Access>Public</Access>
+        <Location left="911" top="1343" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public RentalState ChangeTo(RentalState requestedState)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StateSimulationService</Name>
+        <Access>Public</Access>
+        <Location left="1155" top="1047" />
+        <Size width="278" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public bool GetNextState(RentalState currentState, RentalState requestedState)</Member>
+        <Member type="Method">private IRentalState CreateState(RentalState state)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalObserver</Name>
+        <Access>Public</Access>
+        <Location left="1968" top="726" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Update()</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalSubject</Name>
+        <Access>Public</Access>
+        <Location left="2487" top="726" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void RegisterObserver(IRentalObserver observer)</Member>
+        <Member type="Method">void UnregisterObserver(IRentalObserver observer)</Member>
+        <Member type="Method">void NotifyObservers()</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>RentalStatisticsSubject</Name>
+        <Access>Public</Access>
+        <Location left="2202" top="726" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly List&lt;IRentalObserver&gt; _observers</Member>
+        <Member type="Method">public void RegisterObserver(IRentalObserver observer)</Member>
+        <Member type="Method">public void UnregisterObserver(IRentalObserver observer)</Member>
+        <Member type="Method">public void NotifyObservers()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StatisticsViewModel</Name>
+        <Access>Public</Access>
+        <Location left="1689" top="726" />
+        <Size width="192" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IEnumerable&lt;RentalRecord&gt; _rentalRecords</Member>
+        <Member type="Field">private int _activeCount</Member>
+        <Member type="Field">private int _completedCount</Member>
+        <Member type="Field">private int _cancelledCount</Member>
+        <Member type="Field">private int _overdueCount</Member>
+        <Member type="Field">private IEnumerable&lt;ISeries&gt; _series</Member>
+        <Member type="Constructor">public StatisticsViewModel(IEnumerable&lt;RentalRecord&gt; rentalRecords)</Member>
+        <Member type="Method">public void Update()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>RentalManagementViewModel</Name>
+        <Access>Public</Access>
+        <Location left="1608" top="1047" />
+        <Size width="212" height="216" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Association" first="1" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Realization" first="5" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="6" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="7" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="2" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="3" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="4" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="5" second="8">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="6" second="8">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="7" second="8">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="2" second="9">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="3" second="9">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="4" second="9">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Realization" first="10" second="8">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="11" second="9">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="15" second="16">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1176</X>
+          <Y>1318</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>940</X>
+          <Y>1301</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="17" second="16">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>885</X>
+          <Y>1318</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>885</X>
+          <Y>1301</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="21" second="20">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="13" second="16">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>772</X>
+          <Y>1288</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="14" second="16">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="16" second="12">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="18" second="16">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Dependency" first="18" second="15">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1293</X>
+          <Y>1302</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1293</X>
+          <Y>1420</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Dependency" first="18" second="17">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1313</X>
+          <Y>1288</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1012</X>
+          <Y>1585</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Dependency" first="18" second="14">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1337</X>
+          <Y>1288</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>818</X>
+          <Y>1599</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Dependency" first="18" second="13">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1358</X>
+          <Y>1305</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>611</X>
+          <Y>1617</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="21" second="19">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="23" second="1">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>1712</X>
+          <Y>1283</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="23" second="18">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Realization" first="22" second="19">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="23" second="21">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>2088</X>
+          <Y>1161</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="6" second="9">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>2134</X>
+          <Y>2022</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>

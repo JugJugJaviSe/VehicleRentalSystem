@@ -8,6 +8,7 @@ using System.Windows;
 using VehicleRentalSystem.Component1.ViewModels;
 using VehicleRentalSystem.Services.Interfaces;
 using VehicleRentalSystem.Services.Services;
+using System.IO;
 
 namespace VehicleRentalSystem.Component1
 {
@@ -20,11 +21,11 @@ namespace VehicleRentalSystem.Component1
         {
             base.OnStartup(e);
 
-            string dataDirectory = System.IO.Path.Combine(
-                System.AppDomain.CurrentDomain.BaseDirectory,
+            string dataDirectory = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
                 "Data");
             ILoggingService loggingService = new LoggingService(
-                System.IO.Path.Combine(dataDirectory, "activity.log"));
+                Path.Combine(dataDirectory, "activity.log"));
 
             MainWindow mainWindow = new MainWindow(new MainViewModel(loggingService));
             mainWindow.Show();
