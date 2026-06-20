@@ -68,11 +68,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Adapters\RentalRecordDictionaryAdapter.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Interfaces\IRentalRecordAdapter.cs" />
+    <Compile Include="Models\AdaptedRentalRecordGroup.cs" />
     <Compile Include="Services\IVehicleRentalClient.cs" />
     <Compile Include="Services\VehicleRentalClient.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="ViewModels\RentalRecordsViewModel.cs" />
     <Compile Include="ViewModels\VehicleSelectionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

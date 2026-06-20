@@ -5,14 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VehicleRentalSystem.Component2"
         mc:Ignorable="d"
-        Title="Vehicle Rental - Component 2" Height="450" Width="800">
+        Title="Vehicle Rental - Component 2" Height="600" Width="900">
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!-- Load Vehicles -->
         <Button Grid.Row="0"
                 Content="Load Vehicles"
                 Command="{Binding VehicleSelection.LoadVehiclesCommand}"
@@ -20,6 +24,7 @@
                 HorizontalAlignment="Left"
                 Margin="0,0,0,8" />
 
+        <!-- Vehicle picker -->
         <ComboBox Grid.Row="1"
                   ItemsSource="{Binding VehicleSelection.Vehicles}"
                   SelectedItem="{Binding VehicleSelection.SelectedVehicle}"
@@ -39,8 +44,42 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
+        <!-- Vehicle load status -->
         <TextBlock Grid.Row="2"
                    Text="{Binding VehicleSelection.StatusMessage}"
+                   HorizontalAlignment="Left"
+                   Margin="0,0,0,8" />
+
+        <!-- Month / Year inputs + Load Rental Records -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,8">
+            <TextBlock Text="Year:" VerticalAlignment="Center" Margin="0,0,4,0" />
+            <TextBox Text="{Binding RentalRecords.Year, UpdateSourceTrigger=PropertyChanged}"
+                     Width="60" Margin="0,0,12,0" />
+            <TextBlock Text="Month:" VerticalAlignment="Center" Margin="0,0,4,0" />
+            <TextBox Text="{Binding RentalRecords.Month, UpdateSourceTrigger=PropertyChanged}"
+                     Width="40" Margin="0,0,12,0" />
+            <Button Content="Load Rental Records"
+                    Command="{Binding RentalRecords.LoadRentalRecordsCommand}"
+                    Width="150" />
+        </StackPanel>
+
+        <!-- Adapted groups DataGrid -->
+        <DataGrid Grid.Row="4"
+                  ItemsSource="{Binding RentalRecords.AdaptedGroups}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Margin="0,0,0,8">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Key"         Binding="{Binding Key}"            Width="*" />
+                <DataGridTextColumn Header="Rental Date" Binding="{Binding RentalDateText}" Width="130" />
+                <DataGridTextColumn Header="Count"       Binding="{Binding Count}"          Width="55" />
+                <DataGridTextColumn Header="Records"     Binding="{Binding RecordsText}"    Width="2*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Rental records load status -->
+        <TextBlock Grid.Row="5"
+                   Text="{Binding RentalRecords.StatusMessage}"
                    HorizontalAlignment="Left" />
     </Grid>
 </Window>
