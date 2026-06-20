@@ -4,10 +4,11 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using VehicleRentalSystem.Models.Models;
+using VehicleRentalSystem.Services.Interfaces;
 
 namespace VehicleRentalSystem.Services.Services
 {
-    public class JsonPersistenceService
+    public class JsonPersistenceService : IPersistenceService
     {
         private readonly Encoding _encoding = new UTF8Encoding(false);
 

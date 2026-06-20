@@ -18,7 +18,6 @@ namespace VehicleRentalSystem.Component1.ViewModels
         private string _mileageDrivenText;
         private RentalState _selectedState;
         private string _validationMessage;
-        private bool _wasSaved;
         private readonly bool _isEditMode;
 
         public bool IsEditMode => _isEditMode;
@@ -164,21 +163,6 @@ namespace VehicleRentalSystem.Component1.ViewModels
             }
         }
 
-        public bool WasSaved
-        {
-            get => _wasSaved;
-            private set
-            {
-                if (_wasSaved == value)
-                {
-                    return;
-                }
-
-                _wasSaved = value;
-                OnPropertyChanged();
-            }
-        }
-
         public RelayCommand SaveCommand { get; }
         public RelayCommand CancelCommand { get; }
 
@@ -215,13 +199,11 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
             ValidationMessage = string.Empty;
             RentalDateTime = rentalDateTime;
-            WasSaved = true;
             RequestClose?.Invoke(true);
         }
 
         private void Cancel()
         {
-            WasSaved = false;
             RequestClose?.Invoke(false);
         }
     }

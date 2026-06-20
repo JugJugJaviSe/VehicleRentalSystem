@@ -8,8 +8,7 @@ namespace VehicleRentalSystem.Services.States
         public RentalState ChangeTo(RentalState requestedState)
         {
             if (requestedState == RentalState.Overdue
-                || requestedState == RentalState.Completed
-                || requestedState == RentalState.Cancelled)
+                || requestedState == RentalState.Completed)
             {
                 return requestedState;
             }

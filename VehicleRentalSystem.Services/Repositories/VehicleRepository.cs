@@ -29,6 +29,11 @@ namespace VehicleRentalSystem.Services.Repositories
             _vehicles.Add(vehicle);
         }
 
+        public void AddRange(IEnumerable<Vehicle> vehicles)
+        {
+            _vehicles.AddRange(vehicles);
+        }
+
         public void Update(Vehicle vehicle)
         {
             int index = _vehicles.FindIndex(existingVehicle => existingVehicle.Id == vehicle.Id);

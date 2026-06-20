@@ -51,9 +51,11 @@
     <Compile Include="Commands\DeleteVehicleCommand.cs" />
     <Compile Include="Commands\UpdateRentalRecordCommand.cs" />
     <Compile Include="Commands\UpdateVehicleCommand.cs" />
+    <Compile Include="Interfaces\IPersistenceService.cs" />
     <Compile Include="Interfaces\IRentalRecordRepository.cs" />
     <Compile Include="Interfaces\ILoggingService.cs" />
     <Compile Include="Interfaces\IRentalState.cs" />
+    <Compile Include="Interfaces\IStateSimulationService.cs" />
     <Compile Include="Interfaces\IUndoableCommand.cs" />
     <Compile Include="Interfaces\IVehicleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

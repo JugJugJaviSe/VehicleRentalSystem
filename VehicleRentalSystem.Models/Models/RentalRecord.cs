@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using VehicleRentalSystem.Models.Enums;
 
 namespace VehicleRentalSystem.Models.Models

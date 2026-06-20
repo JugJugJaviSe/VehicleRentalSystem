@@ -29,6 +29,11 @@ namespace VehicleRentalSystem.Services.Repositories
             _rentalRecords.Add(rentalRecord);
         }
 
+        public void AddRange(IEnumerable<RentalRecord> rentalRecords)
+        {
+            _rentalRecords.AddRange(rentalRecords);
+        }
+
         public void Update(RentalRecord rentalRecord)
         {
             int index = _rentalRecords.FindIndex(existingRecord => existingRecord.Id == rentalRecord.Id);

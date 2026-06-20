@@ -9,6 +9,7 @@ namespace VehicleRentalSystem.Services.Interfaces
         IEnumerable<Vehicle> GetAll();
         Vehicle GetById(Guid id);
         void Add(Vehicle vehicle);
+        void AddRange(IEnumerable<Vehicle> vehicles);
         void Update(Vehicle vehicle);
         void Delete(Guid id);
     }

@@ -5,7 +5,7 @@ using VehicleRentalSystem.Services.States;
 
 namespace VehicleRentalSystem.Services.Services
 {
-    public class StateSimulationService
+    public class StateSimulationService : IStateSimulationService
     {
         public RentalState GetNextState(
             RentalState currentState,

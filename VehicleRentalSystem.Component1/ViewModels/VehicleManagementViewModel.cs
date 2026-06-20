@@ -12,7 +12,7 @@ using VehicleRentalSystem.Models.Enums;
 using VehicleRentalSystem.Models.Models;
 using VehicleRentalSystem.Services.Commands;
 using VehicleRentalSystem.Services.Interfaces;
-using VehicleRentalSystem.Services.Services;
+using VehicleRentalSystem.Component1.Mappers;
 
 namespace VehicleRentalSystem.Component1.ViewModels
 {
@@ -20,7 +20,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
     {
         private readonly IVehicleRepository _vehicleRepository;
         private readonly IRentalRecordRepository _rentalRecordRepository;
-        private readonly JsonPersistenceService _persistenceService;
+        private readonly IPersistenceService _persistenceService;
         private readonly ILoggingService _loggingService;
         private readonly CommandHistoryManager _commandHistoryManager;
         private readonly string _vehiclesFilePath;
@@ -73,7 +73,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
         public VehicleManagementViewModel(
             IVehicleRepository vehicleRepository,
             IRentalRecordRepository rentalRecordRepository,
-            JsonPersistenceService persistenceService,
+            IPersistenceService persistenceService,
             ILoggingService loggingService,
             CommandHistoryManager commandHistoryManager,
             string vehiclesFilePath)
@@ -86,9 +86,10 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _vehiclesFilePath = vehiclesFilePath;
 
             Vehicles = new ObservableCollection<Vehicle>();
-            LoadVehicles();
             VehiclesView = CollectionViewSource.GetDefaultView(Vehicles);
             VehiclesView.Filter = FilterVehicle;
+
+            LoadVehicles();
 
             AddVehicleCommand = new RelayCommand(AddVehicle);
             EditVehicleCommand = new RelayCommand(EditVehicle);
@@ -117,16 +118,13 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 _persistenceService.SaveVehicles(vehicles, _vehiclesFilePath);
             }
 
-            foreach (Vehicle vehicle in vehicles)
-            {
-                _vehicleRepository.Add(vehicle);
-                Vehicles.Add(vehicle);
-            }
+            _vehicleRepository.AddRange(vehicles);
+            RefreshVehicles();
         }
 
         public void SaveVehicles()
         {
-            _persistenceService.SaveVehicles(Vehicles, _vehiclesFilePath);
+            _persistenceService.SaveVehicles(_vehicleRepository.GetAll(), _vehiclesFilePath);
         }
 
         public void RefreshVehicles()
@@ -138,7 +136,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 Vehicles.Add(vehicle);
             }
 
-            VehiclesView.Refresh();
+            VehiclesView?.Refresh();
         }
 
         private bool FilterVehicle(object item)
@@ -153,16 +151,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
-                Vehicle vehicle = new Vehicle
-                {
-                    Id = Guid.NewGuid(),
-                    LicensePlate = viewModel.LicensePlate,
-                    Brand = viewModel.Brand,
-                    Model = viewModel.Model,
-                    ProductionYear = int.Parse(viewModel.ProductionYearText),
-                    FuelType = viewModel.SelectedFuelType,
-                    IsAvailable = true
-                };
+                Vehicle vehicle = VehicleMapper.CreateFromDialog(viewModel);
 
                 IUndoableCommand command = new AddVehicleCommand(_vehicleRepository, vehicle);
                 _commandHistoryManager.ExecuteCommand(command);
@@ -192,17 +181,8 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
-                Vehicle oldVehicle = CopyVehicle(SelectedVehicle);
-                Vehicle newVehicle = new Vehicle
-                {
-                    Id = SelectedVehicle.Id,
-                    LicensePlate = viewModel.LicensePlate,
-                    Brand = viewModel.Brand,
-                    Model = viewModel.Model,
-                    ProductionYear = int.Parse(viewModel.ProductionYearText),
-                    FuelType = viewModel.SelectedFuelType,
-                    IsAvailable = SelectedVehicle.IsAvailable
-                };
+                Vehicle oldVehicle = VehicleMapper.Copy(SelectedVehicle);
+                Vehicle newVehicle = VehicleMapper.CreateUpdatedVehicle(SelectedVehicle, viewModel);
 
                 IUndoableCommand command =
                     new UpdateVehicleCommand(_vehicleRepository, oldVehicle, newVehicle);
@@ -288,20 +268,5 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _saveRentalRecords?.Invoke();
             _notifyRentalStatistics?.Invoke();
         }
-
-        private Vehicle CopyVehicle(Vehicle vehicle)
-        {
-            return new Vehicle
-            {
-                Id = vehicle.Id,
-                LicensePlate = vehicle.LicensePlate,
-                Brand = vehicle.Brand,
-                Model = vehicle.Model,
-                ProductionYear = vehicle.ProductionYear,
-                FuelType = vehicle.FuelType,
-                IsAvailable = vehicle.IsAvailable
-            };
-        }
-
     }
 }

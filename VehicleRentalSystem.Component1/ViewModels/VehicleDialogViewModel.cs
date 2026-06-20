@@ -15,7 +15,6 @@ namespace VehicleRentalSystem.Component1.ViewModels
         private string _productionYearText;
         private FuelType _selectedFuelType;
         private string _validationMessage;
-        private bool _wasSaved;
 
         public event Action<bool?> RequestClose;
 
@@ -111,21 +110,6 @@ namespace VehicleRentalSystem.Component1.ViewModels
             }
         }
 
-        public bool WasSaved
-        {
-            get => _wasSaved;
-            private set
-            {
-                if (_wasSaved == value)
-                {
-                    return;
-                }
-
-                _wasSaved = value;
-                OnPropertyChanged();
-            }
-        }
-
         public RelayCommand SaveCommand { get; }
         public RelayCommand CancelCommand { get; }
 
@@ -153,13 +137,11 @@ namespace VehicleRentalSystem.Component1.ViewModels
             }
 
             ValidationMessage = string.Empty;
-            WasSaved = true;
             RequestClose?.Invoke(true);
         }
 
         private void Cancel()
         {
-            WasSaved = false;
             RequestClose?.Invoke(false);
         }
     }

@@ -13,19 +13,19 @@ using VehicleRentalSystem.Models.Enums;
 using VehicleRentalSystem.Models.Models;
 using VehicleRentalSystem.Services.Commands;
 using VehicleRentalSystem.Services.Interfaces;
-using VehicleRentalSystem.Services.Services;
+using VehicleRentalSystem.Component1.Mappers;
 
 namespace VehicleRentalSystem.Component1.ViewModels
 {
     public class RentalManagementViewModel : BaseViewModel
     {
         private readonly IRentalRecordRepository _rentalRecordRepository;
-        private readonly JsonPersistenceService _persistenceService;
+        private readonly IPersistenceService _persistenceService;
         private readonly ILoggingService _loggingService;
-        private readonly StateSimulationService _stateSimulationService;
+        private readonly IStateSimulationService _stateSimulationService;
         private readonly CommandHistoryManager _commandHistoryManager;
-        private readonly RentalStatisticsSubject _rentalStatisticsSubject;
-        private readonly IEnumerable<Vehicle> _vehicles;
+        private readonly IRentalSubject _rentalStatisticsSubject;
+        private readonly IVehicleRepository _vehicleRepository;
         private readonly Action _saveVehicles;
         private readonly Action _refreshVehicles;
         private readonly string _rentalRecordsFilePath;
@@ -62,7 +62,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
                 _rentalSearchText = value;
                 OnPropertyChanged();
-                RentalRecordsView.Refresh();
+                RentalRecordsView?.Refresh();
             }
         }
 
@@ -74,12 +74,12 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
         public RentalManagementViewModel(
             IRentalRecordRepository rentalRecordRepository,
-            JsonPersistenceService persistenceService,
+            IPersistenceService persistenceService,
             ILoggingService loggingService,
-            StateSimulationService stateSimulationService,
+            IStateSimulationService stateSimulationService,
             CommandHistoryManager commandHistoryManager,
-            RentalStatisticsSubject rentalStatisticsSubject,
-            IEnumerable<Vehicle> vehicles,
+            IRentalSubject rentalStatisticsSubject,
+            IVehicleRepository vehicleRepository,
             Action saveVehicles,
             Action refreshVehicles,
             string rentalRecordsFilePath)
@@ -90,15 +90,16 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _stateSimulationService = stateSimulationService;
             _commandHistoryManager = commandHistoryManager;
             _rentalStatisticsSubject = rentalStatisticsSubject;
-            _vehicles = vehicles;
+            _vehicleRepository = vehicleRepository;
             _saveVehicles = saveVehicles;
             _refreshVehicles = refreshVehicles;
             _rentalRecordsFilePath = rentalRecordsFilePath;
 
             RentalRecords = new ObservableCollection<RentalRecord>();
-            LoadRentalRecords();
             RentalRecordsView = CollectionViewSource.GetDefaultView(RentalRecords);
             RentalRecordsView.Filter = FilterRentalRecord;
+
+            LoadRentalRecords();
             SynchronizeVehicleAvailability();
 
             AddRentalRecordCommand = new RelayCommand(AddRentalRecord);
@@ -119,16 +120,13 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 _persistenceService.SaveRentalRecords(rentalRecords, _rentalRecordsFilePath);
             }
 
-            foreach (RentalRecord rentalRecord in rentalRecords)
-            {
-                _rentalRecordRepository.Add(rentalRecord);
-                RentalRecords.Add(rentalRecord);
-            }
+            _rentalRecordRepository.AddRange(rentalRecords);
+            RefreshRentalRecords();
         }
 
         public void SaveRentalRecords()
         {
-            _persistenceService.SaveRentalRecords(RentalRecords, _rentalRecordsFilePath);
+            _persistenceService.SaveRentalRecords(_rentalRecordRepository.GetAll(), _rentalRecordsFilePath);
         }
 
         public void RefreshRentalRecords()
@@ -140,7 +138,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 RentalRecords.Add(rentalRecord);
             }
 
-            RentalRecordsView.Refresh();
+            RentalRecordsView?.Refresh();
         }
 
         private bool FilterRentalRecord(object item)
@@ -150,9 +148,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
         private void AddRentalRecord()
         {
-            List<Vehicle> availableVehicles = _vehicles
-                .Where(vehicle => vehicle.IsAvailable)
-                .ToList();
+            List<Vehicle> availableVehicles = _vehicleRepository.GetAll().Where(vehicle => vehicle.IsAvailable).ToList();
 
             if (!availableVehicles.Any())
             {
@@ -170,17 +166,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
-                RentalRecord rentalRecord = new RentalRecord
-                {
-                    Id = Guid.NewGuid(),
-                    VehicleId = viewModel.SelectedVehicleId,
-                    RentalDate = viewModel.RentalDateTime,
-                    DurationDays = viewModel.DurationDays,
-                    TotalCost = viewModel.TotalCost,
-                    MileageDriven = viewModel.MileageDriven,
-                    State = RentalState.Active
-                };
-
+                RentalRecord rentalRecord = RentalRecordMapper.CreateFromDialog(viewModel);
                 IUndoableCommand command =
                     new AddRentalRecordCommand(_rentalRecordRepository, rentalRecord);
                 _commandHistoryManager.ExecuteCommand(command);
@@ -199,8 +185,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 return;
             }
 
-            RentalRecordDialogViewModel viewModel =
-                new RentalRecordDialogViewModel(_vehicles, true)
+            RentalRecordDialogViewModel viewModel = new RentalRecordDialogViewModel(_vehicleRepository.GetAll(), true)
             {
                 RentalDate = SelectedRentalRecord.RentalDate.Date,
                 RentalTimeText = SelectedRentalRecord.RentalDate.ToString("HH:mm"),
@@ -209,18 +194,15 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 MileageDrivenText = SelectedRentalRecord.MileageDriven.ToString(),
                 SelectedState = SelectedRentalRecord.State
             };
-            viewModel.SelectedVehicle = _vehicles.FirstOrDefault(
-                vehicle => vehicle.Id == SelectedRentalRecord.VehicleId);
+            viewModel.SelectedVehicle = _vehicleRepository.GetAll().FirstOrDefault(vehicle => vehicle.Id == SelectedRentalRecord.VehicleId);
             RentalRecordDialog dialog = new RentalRecordDialog(viewModel);
 
             if (dialog.ShowDialog() == true)
             {
-                RentalRecord oldRentalRecord = CopyRentalRecord(SelectedRentalRecord);
+                RentalRecord oldRentalRecord = RentalRecordMapper.Copy(SelectedRentalRecord);
                 RentalState oldState = SelectedRentalRecord.State;
                 RentalState requestedState = viewModel.SelectedState;
-                RentalState nextState = _stateSimulationService.GetNextState(
-                    oldState,
-                    requestedState);
+                RentalState nextState = _stateSimulationService.GetNextState(oldState, requestedState);
 
                 if (nextState != requestedState)
                 {
@@ -228,16 +210,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
                     return;
                 }
 
-                RentalRecord newRentalRecord = new RentalRecord
-                {
-                    Id = SelectedRentalRecord.Id,
-                    VehicleId = SelectedRentalRecord.VehicleId,
-                    RentalDate = viewModel.RentalDateTime,
-                    DurationDays = viewModel.DurationDays,
-                    TotalCost = viewModel.TotalCost,
-                    MileageDriven = viewModel.MileageDriven,
-                    State = nextState
-                };
+                RentalRecord newRentalRecord = RentalRecordMapper.CreateUpdatedRentalRecord(SelectedRentalRecord, viewModel, nextState);
 
                 IUndoableCommand command =
                     new UpdateRentalRecordCommand(
@@ -310,26 +283,13 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _loggingService.Log("Rental Redo Executed");
         }
 
-        private RentalRecord CopyRentalRecord(RentalRecord rentalRecord)
-        {
-            return new RentalRecord
-            {
-                Id = rentalRecord.Id,
-                VehicleId = rentalRecord.VehicleId,
-                RentalDate = rentalRecord.RentalDate,
-                DurationDays = rentalRecord.DurationDays,
-                TotalCost = rentalRecord.TotalCost,
-                MileageDriven = rentalRecord.MileageDriven,
-                State = rentalRecord.State
-            };
-        }
-
         private void SynchronizeVehicleAvailability()
         {
-            foreach (Vehicle vehicle in _vehicles)
+            foreach (Vehicle vehicle in _vehicleRepository.GetAll())
             {
-                vehicle.IsAvailable = !RentalRecords.Any(
-                    rentalRecord =>
+                vehicle.IsAvailable = !_rentalRecordRepository
+                    .GetAll()
+                    .Any(rentalRecord =>
                         rentalRecord.VehicleId == vehicle.Id
                         && (rentalRecord.State == RentalState.Active
                             || rentalRecord.State == RentalState.Overdue));
@@ -338,6 +298,5 @@ namespace VehicleRentalSystem.Component1.ViewModels
             _refreshVehicles?.Invoke();
             _saveVehicles?.Invoke();
         }
-
     }
 }
