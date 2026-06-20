@@ -70,6 +70,10 @@
     </Compile>
     <Compile Include="Services\IVehicleRentalClient.cs" />
     <Compile Include="Services\VehicleRentalClient.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="ViewModels\VehicleSelectionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

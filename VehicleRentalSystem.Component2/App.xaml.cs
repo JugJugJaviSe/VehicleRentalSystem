@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using VehicleRentalSystem.Component2.Services;
+using VehicleRentalSystem.Component2.ViewModels;
 
 namespace VehicleRentalSystem.Component2
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            var client = new VehicleRentalClient();
+            var vehicleSelection = new VehicleSelectionViewModel(client);
+            var mainViewModel = new MainViewModel(vehicleSelection);
+            var mainWindow = new MainWindow(mainViewModel);
+            mainWindow.Show();
+        }
     }
 }

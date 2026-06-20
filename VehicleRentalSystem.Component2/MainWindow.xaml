@@ -5,8 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VehicleRentalSystem.Component2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Vehicle Rental - Component 2" Height="450" Width="800">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0"
+                Content="Load Vehicles"
+                Command="{Binding VehicleSelection.LoadVehiclesCommand}"
+                Width="120"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,8" />
+
+        <ComboBox Grid.Row="1"
+                  ItemsSource="{Binding VehicleSelection.Vehicles}"
+                  SelectedItem="{Binding VehicleSelection.SelectedVehicle}"
+                  Width="360"
+                  HorizontalAlignment="Left"
+                  Margin="0,0,0,8">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="{Binding Brand, Mode=OneWay}" />
+                        <Run Text=" " />
+                        <Run Text="{Binding Model, Mode=OneWay}" />
+                        <Run Text=" — " />
+                        <Run Text="{Binding LicensePlate, Mode=OneWay}" />
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock Grid.Row="2"
+                   Text="{Binding VehicleSelection.StatusMessage}"
+                   HorizontalAlignment="Left" />
     </Grid>
 </Window>
