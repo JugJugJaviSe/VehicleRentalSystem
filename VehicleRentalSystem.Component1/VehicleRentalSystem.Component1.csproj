@@ -90,6 +90,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -108,6 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\VehicleRentalService.cs" />
     <Compile Include="Helpers\SampleDataFactory.cs" />
     <Compile Include="Mappers\RentalRecordMapper.cs" />
     <Compile Include="Mappers\VehicleMapper.cs" />
@@ -191,6 +193,10 @@
     <ProjectReference Include="..\VehicleRentalSystem.Services\VehicleRentalSystem.Services.csproj">
       <Project>{0e2fe98c-41d4-4f75-894b-6fecca413b02}</Project>
       <Name>VehicleRentalSystem.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VehicleRentalSystem.WcfService\VehicleRentalSystem.WcfService.csproj">
+      <Project>{D6B5610F-0E80-44AD-B8B5-82A12BD9A4A1}</Project>
+      <Name>VehicleRentalSystem.WcfService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

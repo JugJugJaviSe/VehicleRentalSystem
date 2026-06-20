@@ -55,6 +55,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IVehicleRentalService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,14 +66,8 @@
       <Project>{2925e404-c58f-4f72-84d0-235ea5eab068}</Project>
       <Name>VehicleRentalSystem.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VehicleRentalSystem.Services\VehicleRentalSystem.Services.csproj">
-      <Project>{0e2fe98c-41d4-4f75-894b-6fecca413b02}</Project>
-      <Name>VehicleRentalSystem.Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,17 +1,22 @@
-﻿using System;
+using System;
 using System.IO;
+using System.ServiceModel;
 using System.Windows;
 using VehicleRentalSystem.Component1.Observers;
+using VehicleRentalSystem.Component1.Services;
 using VehicleRentalSystem.Component1.ViewModels;
 using VehicleRentalSystem.Services.Commands;
 using VehicleRentalSystem.Services.Interfaces;
 using VehicleRentalSystem.Services.Repositories;
 using VehicleRentalSystem.Services.Services;
+using VehicleRentalSystem.WcfService.Contracts;
 
 namespace VehicleRentalSystem.Component1
 {
     public partial class App : Application
     {
+        private ServiceHost _serviceHost;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -41,6 +46,20 @@ namespace VehicleRentalSystem.Component1
             CommandHistoryManager rentalCommandHistoryManager =
                 new CommandHistoryManager();
 
+            var binding = new NetTcpBinding(SecurityMode.None)
+            {
+                OpenTimeout = TimeSpan.FromSeconds(10),
+                CloseTimeout = TimeSpan.FromSeconds(10),
+                SendTimeout = TimeSpan.FromSeconds(30),
+                ReceiveTimeout = TimeSpan.FromMinutes(10),
+                MaxReceivedMessageSize = 1024 * 1024
+            };
+
+            var wcfService = new VehicleRentalService(vehicleRepository, rentalRecordRepository);
+            _serviceHost = new ServiceHost(wcfService, new Uri("net.tcp://localhost:8734/VehicleRentalService/"));
+            _serviceHost.AddServiceEndpoint(typeof(IVehicleRentalService), binding, "");
+            _serviceHost.Open();
+
             MainViewModel mainViewModel = new MainViewModel(
                 vehicleRepository,
                 rentalRecordRepository,
@@ -55,6 +74,12 @@ namespace VehicleRentalSystem.Component1
 
             MainWindow mainWindow = new MainWindow(mainViewModel);
             mainWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _serviceHost?.Close();
+            base.OnExit(e);
         }
     }
 }
