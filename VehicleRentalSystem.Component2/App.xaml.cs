@@ -13,7 +13,8 @@ namespace VehicleRentalSystem.Component2
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            var client = new VehicleRentalClient();
+            var realClient = new VehicleRentalClient();
+            var client = new FallbackVehicleRentalClient(realClient);
             var vehicleSelection = new VehicleSelectionViewModel(client);
             var adapter = new RentalRecordDictionaryAdapter();
             var cache = new RentalRecordCache();
@@ -25,9 +26,11 @@ namespace VehicleRentalSystem.Component2
                 new MaxMileageStrategy(),
                 new OverdueCountStrategy()
             };
+            var exportService = new CsvRentalStatisticExportService();
+            var saveFileDialogService = new SaveFileDialogService();
 
             var rentalRecords = new RentalRecordsViewModel(loadService, cache, groupFactory, vehicleSelection);
-            var rentalStatistics = new RentalStatisticsViewModel(strategies);
+            var rentalStatistics = new RentalStatisticsViewModel(strategies, exportService, saveFileDialogService);
 
             rentalRecords.Attach(rentalStatistics);
 

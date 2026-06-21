@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using VehicleRentalSystem.Component2.Interfaces;
 using VehicleRentalSystem.Models.Models;
 using VehicleRentalSystem.WcfService.Contracts;
 
@@ -8,6 +9,8 @@ namespace VehicleRentalSystem.Component2.Services
 {
     public class VehicleRentalClient : IVehicleRentalClient
     {
+        public bool UsedFallback => false;
+
         public List<Vehicle> GetAllVehicles()
         {
             var factory = new ChannelFactory<IVehicleRentalService>("VehicleRentalServiceEndpoint");

@@ -54,17 +54,17 @@
         <!-- Month / Year inputs + Load Rental Records -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,8">
             <TextBlock Text="Year:" VerticalAlignment="Center" Margin="0,0,4,0" />
-            <TextBox Text="{Binding RentalRecords.Year, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding RentalRecords.YearInputText, UpdateSourceTrigger=PropertyChanged}"
                      Width="60" Margin="0,0,12,0" />
             <TextBlock Text="Month:" VerticalAlignment="Center" Margin="0,0,4,0" />
-            <TextBox Text="{Binding RentalRecords.Month, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding RentalRecords.MonthInputText, UpdateSourceTrigger=PropertyChanged}"
                      Width="40" Margin="0,0,12,0" />
             <Button Content="Load Rental Records"
                     Command="{Binding RentalRecords.LoadRentalRecordsCommand}"
                     Width="150" />
-            <Button Content="Clear"
+            <Button Content="Clear Displayed Data"
                     Command="{Binding RentalRecords.ClearRentalRecordsCommand}"
-                    Width="90"
+                    Width="140"
                     Margin="8,0,0,0" />
         </StackPanel>
 
@@ -107,16 +107,30 @@
                    Margin="0,0,0,8" />
 
         <!-- Strategy statistics -->
-        <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0,4,0,0">
-            <TextBlock Text="Statistic:" VerticalAlignment="Center" Margin="0,0,4,0" />
-            <ComboBox ItemsSource="{Binding RentalStatistics.AvailableStrategies}"
-                      SelectedItem="{Binding RentalStatistics.SelectedStrategy}"
-                      DisplayMemberPath="Name"
-                      Width="180"
-                      Margin="0,0,8,0" />
-            <TextBlock Text="{Binding RentalStatistics.SelectedStatisticResult}"
-                       VerticalAlignment="Center"
-                       FontWeight="SemiBold" />
+        <StackPanel Grid.Row="6" Margin="0,4,0,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Statistic:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                <ComboBox ItemsSource="{Binding RentalStatistics.AvailableStrategies}"
+                          SelectedItem="{Binding RentalStatistics.SelectedStrategy}"
+                          DisplayMemberPath="Name"
+                          Width="180"
+                          Margin="0,0,8,0" />
+                <TextBlock Text="{Binding RentalStatistics.SelectedStatisticResult}"
+                           VerticalAlignment="Center"
+                           FontWeight="SemiBold" />
+                <Button Content="Export CSV"
+                        Command="{Binding RentalStatistics.ExportStatisticCommand}"
+                        Width="100"
+                        Margin="12,0,0,0" />
+            </StackPanel>
+            <TextBlock Text="Statistics are calculated from all displayed rental records."
+                       FontSize="11"
+                       Foreground="Gray"
+                       Margin="0,4,0,0" />
+            <TextBlock Text="{Binding RentalStatistics.ExportStatusMessage}"
+                       FontSize="11"
+                       Foreground="DarkSlateGray"
+                       Margin="0,2,0,0" />
         </StackPanel>
     </Grid>
 </Window>

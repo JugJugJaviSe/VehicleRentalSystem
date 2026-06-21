@@ -1,9 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
-using System.ServiceModel;
 using System.Windows.Input;
 using VehicleRentalSystem.Component2.Commands;
-using VehicleRentalSystem.Component2.Services;
+using VehicleRentalSystem.Component2.Interfaces;
 using VehicleRentalSystem.Models.Models;
 
 namespace VehicleRentalSystem.Component2.ViewModels
@@ -44,15 +43,9 @@ namespace VehicleRentalSystem.Component2.ViewModels
                 Vehicles.Clear();
                 foreach (var v in vehicles)
                     Vehicles.Add(v);
-                StatusMessage = $"Loaded {vehicles.Count} vehicle(s).";
-            }
-            catch (CommunicationException ex)
-            {
-                StatusMessage = $"Service unavailable: {ex.Message}";
-            }
-            catch (TimeoutException)
-            {
-                StatusMessage = "Connection timed out.";
+                StatusMessage = _client.UsedFallback
+                    ? "Component 1 is unavailable. Using fallback data."
+                    : $"Loaded {vehicles.Count} vehicle(s).";
             }
             catch (Exception ex)
             {
