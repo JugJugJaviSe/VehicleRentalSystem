@@ -1,0 +1,407 @@
+<Project>
+  <Name>RVA Project</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.ClassDiagram" assembly="NClass.DiagramEditor, Version=2.8.0.2, Culture=neutral, PublicKeyToken=null">
+    <Name>Component 2</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Enum">
+        <Name>RentalState</Name>
+        <Access>Public</Access>
+        <Location left="579" top="316" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Value>Active</Value>
+        <Value>Completed</Value>
+        <Value>Cancelled</Value>
+        <Value>Overdue</Value>
+      </Entity>
+      <Entity type="Class">
+        <Name>RentalRecord</Name>
+        <Access>Public</Access>
+        <Location left="836" top="316" />
+        <Size width="300" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public Guid Id { get; set; }</Member>
+        <Member type="Property">public Guid VehicleId { get; set; }</Member>
+        <Member type="Property">public DateTime RentalDate { get; set; }</Member>
+        <Member type="Property">public double DurationDays { get; set; }</Member>
+        <Member type="Property">public double TotalCost { get; set; }</Member>
+        <Member type="Property">public double MileageDriven { get; set; }</Member>
+        <Member type="Property">public RentalState State { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Vehicle</Name>
+        <Access>Public</Access>
+        <Location left="1218" top="316" />
+        <Size width="280" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public Guid Id { get; set; }</Member>
+        <Member type="Property">public string LicensePlate { get; set; }</Member>
+        <Member type="Property">public string Brand { get; set; }</Member>
+        <Member type="Property">public string Model { get; set; }</Member>
+        <Member type="Property">public int ProductionYear { get; set; }</Member>
+        <Member type="Property">public FuelType FuelType { get; set; }</Member>
+        <Member type="Property">public bool IsAvailable { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StatisticResult</Name>
+        <Access>Public</Access>
+        <Location left="305" top="1497" />
+        <Size width="210" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public string Label { get; set; }</Member>
+        <Member type="Property">public string Value { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IVehicleRentalService</Name>
+        <Access>Public</Access>
+        <Location left="1641" top="316" />
+        <Size width="500" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">List&lt;Vehicle&gt; GetAllVehicles()</Member>
+        <Member type="Method">List&lt;RentalRecord&gt; GetRentalRecordsByVehicleAndMonth(Guid vehicleId, int year, int month)</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalRecordAdapter</Name>
+        <Access>Public</Access>
+        <Location left="1042" top="1052" />
+        <Size width="530" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">KeyValuePair&lt;string, List&lt;RentalRecord&gt;&gt; AdaptToDictionaryEntry(Guid vehicleId, int year, int month, IEnumerable&lt;RentalRecord&gt; rentalRecords)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>RentalRecordDictionaryAdapter</Name>
+        <Access>Public</Access>
+        <Location left="324" top="1052" />
+        <Size width="530" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public KeyValuePair&lt;string, List&lt;RentalRecord&gt;&gt; AdaptToDictionaryEntry(Guid vehicleId, int year, int month, IEnumerable&lt;RentalRecord&gt; rentalRecords)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalRecordCache</Name>
+        <Access>Public</Access>
+        <Location left="961" top="714" />
+        <Size width="430" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void AddOrUpdate(string key, IEnumerable&lt;RentalRecord&gt; records)</Member>
+        <Member type="Method">void Remove(Guid vehicleId, int year, int month)</Member>
+        <Member type="Method">void Clear()</Member>
+        <Member type="Method">IReadOnlyList&lt;IReadOnlyList&lt;RentalRecord&gt;&gt; GetGroups()</Member>
+        <Member type="Method">IReadOnlyList&lt;RentalRecord&gt; GetAllRecords()</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>RentalRecordCache</Name>
+        <Access>Public</Access>
+        <Location left="286" top="714" />
+        <Size width="430" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly Dictionary&lt;string, List&lt;RentalRecord&gt;&gt; _records</Member>
+        <Member type="Method">public void AddOrUpdate(string key, IEnumerable&lt;RentalRecord&gt; records)</Member>
+        <Member type="Method">public void Remove(Guid vehicleId, int year, int month)</Member>
+        <Member type="Method">public void Clear()</Member>
+        <Member type="Method">public IReadOnlyList&lt;IReadOnlyList&lt;RentalRecord&gt;&gt; GetGroups()</Member>
+        <Member type="Method">public IReadOnlyList&lt;RentalRecord&gt; GetAllRecords()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>BaseViewModel</Name>
+        <Access>Public</Access>
+        <Location left="1971" top="1343" />
+        <Size width="350" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">protected void OnPropertyChanged(string name)</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalRecordsSubject</Name>
+        <Access>Public</Access>
+        <Location left="1169" top="1388" />
+        <Size width="350" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Attach(IRentalRecordsObserver observer)</Member>
+        <Member type="Method">void Detach(IRentalRecordsObserver observer)</Member>
+        <Member type="Method">void NotifyObservers()</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalRecordsObserver</Name>
+        <Access>Public</Access>
+        <Location left="2306" top="1004" />
+        <Size width="430" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void OnRentalRecordsLoaded(IReadOnlyList&lt;RentalRecord&gt; records)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>RentalRecordsViewModel</Name>
+        <Access>Public</Access>
+        <Location left="1677" top="1052" />
+        <Size width="420" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IRentalRecordLoadService _loadService</Member>
+        <Member type="Field">private readonly IRentalRecordCache _cache</Member>
+        <Member type="Field">private readonly List&lt;IRentalRecordsObserver&gt; _observers</Member>
+        <Member type="Method">public void Attach(IRentalRecordsObserver observer)</Member>
+        <Member type="Method">public void Detach(IRentalRecordsObserver observer)</Member>
+        <Member type="Method">public void NotifyObservers()</Member>
+        <Member type="Method">private void LoadRentalRecords()</Member>
+        <Member type="Method">private void RefreshDisplayedGroups()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>RentalStatisticsViewModel</Name>
+        <Access>Public</Access>
+        <Location left="1414" top="1694" />
+        <Size width="440" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IReadOnlyList&lt;IRentalStatisticStrategy&gt; _strategies</Member>
+        <Member type="Field">private readonly IRentalStatisticExportService _exportService</Member>
+        <Member type="Field">private IRentalStatisticStrategy _selectedStrategy</Member>
+        <Member type="Method">public void OnRentalRecordsLoaded(IReadOnlyList&lt;RentalRecord&gt; records)</Member>
+        <Member type="Method">private void CalculateSelectedStatistic()</Member>
+        <Member type="Method">private void ExportStatistic()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalStatisticStrategy</Name>
+        <Access>Public</Access>
+        <Location left="690" top="1514" />
+        <Size width="420" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">string Name { get; }</Member>
+        <Member type="Method">StatisticResult Calculate(IEnumerable&lt;RentalRecord&gt; records)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>AverageDurationStrategy</Name>
+        <Access>Public</Access>
+        <Location left="344" top="1833" />
+        <Size width="380" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public string Name { get; }</Member>
+        <Member type="Method">public StatisticResult Calculate(IEnumerable&lt;RentalRecord&gt; records)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>MaxMileageStrategy</Name>
+        <Access>Public</Access>
+        <Location left="666" top="2095" />
+        <Size width="380" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public string Name { get; }</Member>
+        <Member type="Method">public StatisticResult Calculate(IEnumerable&lt;RentalRecord&gt; records)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>OverdueCountStrategy</Name>
+        <Access>Public</Access>
+        <Location left="1103" top="2045" />
+        <Size width="380" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public string Name { get; }</Member>
+        <Member type="Method">public StatisticResult Calculate(IEnumerable&lt;RentalRecord&gt; records)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IRentalStatisticExportService</Name>
+        <Access>Public</Access>
+        <Location left="1633" top="2034" />
+        <Size width="370" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Export(string filePath, StatisticExportData data)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>CsvRentalStatisticExportService</Name>
+        <Access>Public</Access>
+        <Location left="2054" top="1997" />
+        <Size width="370" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void Export(string filePath, StatisticExportData data)</Member>
+        <Member type="Method">private static string Escape(string value)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StatisticExportData</Name>
+        <Access>Public</Access>
+        <Location left="2431" top="1783" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public string StatisticName { get; set; }</Member>
+        <Member type="Property">public string Value { get; set; }</Member>
+        <Member type="Property">public DateTime CalculatedAt { get; set; }</Member>
+        <Member type="Property">public int RecordsCount { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Containers />
+    <Relationships>
+      <Relationship type="Association" first="1" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Realization" first="6" second="5">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>879</X>
+          <Y>1169</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1007</X>
+          <Y>1169</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="8" second="7">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>770</X>
+          <Y>826</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>931</X>
+          <Y>826</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="12" second="9">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>2174</X>
+          <Y>1198</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="13" second="9">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1978</X>
+          <Y>1751</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="12" second="10">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="13" second="11">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>2030</X>
+          <Y>1771</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="12" second="11">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="12" second="7">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>1492</X>
+          <Y>842</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="13" second="14">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>1158</X>
+          <Y>1645</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>1..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="13" second="18">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Realization" first="15" second="14">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>818</X>
+          <Y>1781</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="16" second="14">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="17" second="14">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="19" second="18">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Dependency" first="14" second="3">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>665</X>
+          <Y>1633</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>691</X>
+          <Y>1629</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Dependency" first="12" second="4">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1974</X>
+          <Y>999</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Dependency" first="4" second="2">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Dependency" first="4" second="1">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>1016</X>
+          <Y>238</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="7" second="1">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Dependency" first="12" second="5">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Dependency" first="19" second="20">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
