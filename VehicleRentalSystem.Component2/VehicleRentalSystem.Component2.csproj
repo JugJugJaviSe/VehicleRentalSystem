@@ -64,6 +64,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\RentalRecordCacheKeyBuilder.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -71,12 +72,26 @@
     <Compile Include="Adapters\RentalRecordDictionaryAdapter.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Interfaces\IRentalRecordAdapter.cs" />
-    <Compile Include="Models\AdaptedRentalRecordGroup.cs" />
+    <Compile Include="Interfaces\IRentalRecordCache.cs" />
+    <Compile Include="Interfaces\IRentalRecordGroupViewModelFactory.cs" />
+    <Compile Include="Interfaces\IRentalRecordLoadService.cs" />
+    <Compile Include="Interfaces\IRentalRecordsObserver.cs" />
+    <Compile Include="Interfaces\IRentalRecordsSubject.cs" />
+    <Compile Include="Interfaces\IRentalStatisticStrategy.cs" />
+    <Compile Include="Models\StatisticResult.cs" />
+    <Compile Include="Strategies\AverageDurationStrategy.cs" />
+    <Compile Include="Strategies\MaxMileageStrategy.cs" />
+    <Compile Include="Strategies\OverdueCountStrategy.cs" />
     <Compile Include="Services\IVehicleRentalClient.cs" />
+    <Compile Include="Services\RentalRecordCache.cs" />
+    <Compile Include="Services\RentalRecordLoadService.cs" />
     <Compile Include="Services\VehicleRentalClient.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\RentalRecordGroupViewModel.cs" />
+    <Compile Include="ViewModels\RentalRecordGroupViewModelFactory.cs" />
     <Compile Include="ViewModels\RentalRecordsViewModel.cs" />
+    <Compile Include="ViewModels\RentalStatisticsViewModel.cs" />
     <Compile Include="ViewModels\VehicleSelectionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

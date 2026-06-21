@@ -14,6 +14,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Load Vehicles -->
@@ -61,25 +62,61 @@
             <Button Content="Load Rental Records"
                     Command="{Binding RentalRecords.LoadRentalRecordsCommand}"
                     Width="150" />
+            <Button Content="Clear"
+                    Command="{Binding RentalRecords.ClearRentalRecordsCommand}"
+                    Width="90"
+                    Margin="8,0,0,0" />
         </StackPanel>
 
-        <!-- Adapted groups DataGrid -->
-        <DataGrid Grid.Row="4"
-                  ItemsSource="{Binding RentalRecords.AdaptedGroups}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  Margin="0,0,0,8">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Key"         Binding="{Binding Key}"            Width="*" />
-                <DataGridTextColumn Header="Rental Date" Binding="{Binding RentalDateText}" Width="130" />
-                <DataGridTextColumn Header="Count"       Binding="{Binding Count}"          Width="55" />
-                <DataGridTextColumn Header="Records"     Binding="{Binding RecordsText}"    Width="2*" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- Cached rental record groups -->
+        <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto" Margin="0,0,0,8">
+            <ItemsControl ItemsSource="{Binding RentalRecords.DisplayedGroups}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,12">
+                            <TextBlock Margin="0,0,0,4" FontWeight="SemiBold">
+                                <Run Text="Vehicle ID: " />
+                                <Run Text="{Binding VehicleId, Mode=OneWay}" />
+                                <Run Text="   Rental period: " />
+                                <Run Text="{Binding RentalPeriod, Mode=OneWay}" />
+                                <Run Text="   Record count: " />
+                                <Run Text="{Binding RecordCount, Mode=OneWay}" />
+                            </TextBlock>
+                            <DataGrid ItemsSource="{Binding Records}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      HeadersVisibility="Column">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Rental Date"        Binding="{Binding RentalDate, StringFormat=yyyy-MM-dd HH:mm}" Width="140" />
+                                    <DataGridTextColumn Header="Duration Days"      Binding="{Binding DurationDays}"                              Width="100" />
+                                    <DataGridTextColumn Header="Total Cost (RSD)"   Binding="{Binding TotalCost, StringFormat=F2}"                Width="120" />
+                                    <DataGridTextColumn Header="Mileage Driven (km)" Binding="{Binding MileageDriven, StringFormat=F2}"           Width="140" />
+                                    <DataGridTextColumn Header="State"              Binding="{Binding State}"                                     Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
 
         <!-- Rental records load status -->
         <TextBlock Grid.Row="5"
                    Text="{Binding RentalRecords.StatusMessage}"
-                   HorizontalAlignment="Left" />
+                   HorizontalAlignment="Left"
+                   Margin="0,0,0,8" />
+
+        <!-- Strategy statistics -->
+        <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0,4,0,0">
+            <TextBlock Text="Statistic:" VerticalAlignment="Center" Margin="0,0,4,0" />
+            <ComboBox ItemsSource="{Binding RentalStatistics.AvailableStrategies}"
+                      SelectedItem="{Binding RentalStatistics.SelectedStrategy}"
+                      DisplayMemberPath="Name"
+                      Width="180"
+                      Margin="0,0,8,0" />
+            <TextBlock Text="{Binding RentalStatistics.SelectedStatisticResult}"
+                       VerticalAlignment="Center"
+                       FontWeight="SemiBold" />
+        </StackPanel>
     </Grid>
 </Window>
