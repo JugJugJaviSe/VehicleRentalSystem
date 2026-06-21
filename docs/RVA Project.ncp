@@ -272,9 +272,22 @@
       <Entity type="Class">
         <Name>RentalManagementViewModel</Name>
         <Access>Public</Access>
-        <Location left="1608" top="1047" />
-        <Size width="212" height="216" />
+        <Location left="1608" top="968" />
+        <Size width="316" height="298" />
         <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IRentalRecordRepository _rentalRecordRepository</Member>
+        <Member type="Field">private readonly IPersistenceService _persistenceService</Member>
+        <Member type="Field">private readonly ILoggingService _loggingService</Member>
+        <Member type="Field">private readonly IStateSimulationService _stateSimulationService</Member>
+        <Member type="Field">private readonly CommandHistoryManager _commandHistoryManager</Member>
+        <Member type="Field">private readonly IRentalSubject _rentalStatisticsSubject</Member>
+        <Member type="Field">private readonly IVehicleRepository _vehicleRepository</Member>
+        <Member type="Field">private readonly IVehicleAvailabilityService _vehicleAvailabilityService</Member>
+        <Member type="Method">private void AddRentalRecord()</Member>
+        <Member type="Method">private void EditRentalRecord()</Member>
+        <Member type="Method">private void DeleteRentalRecord()</Member>
+        <Member type="Method">private void UndoRental()</Member>
+        <Member type="Method">private void RedoRental()</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Interface">
@@ -500,8 +513,8 @@
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
-          <X>2088</X>
-          <Y>1161</Y>
+          <X>2192</X>
+          <Y>1082</Y>
         </BendPoint>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
