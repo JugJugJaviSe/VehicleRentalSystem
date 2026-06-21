@@ -13,59 +13,26 @@ namespace VehicleRentalSystem.Component2.Services
 
         public List<Vehicle> GetAllVehicles()
         {
-            var factory = new ChannelFactory<IVehicleRentalService>("VehicleRentalServiceEndpoint");
-            IVehicleRentalService channel = factory.CreateChannel();
-            try
-            {
-                List<Vehicle> result = channel.GetAllVehicles();
-                ((IClientChannel)channel).Close();
-                factory.Close();
-                return result;
-            }
-            catch (CommunicationException)
-            {
-                ((IClientChannel)channel).Abort();
-                factory.Abort();
-                throw;
-            }
-            catch (TimeoutException)
-            {
-                ((IClientChannel)channel).Abort();
-                factory.Abort();
-                throw;
-            }
-            catch (Exception)
-            {
-                ((IClientChannel)channel).Abort();
-                factory.Abort();
-                throw;
-            }
+            return CallService(channel => channel.GetAllVehicles());
         }
 
         public List<RentalRecord> GetRentalRecordsByVehicleAndMonth(Guid vehicleId, int year, int month)
+        {
+            return CallService(channel => channel.GetRentalRecordsByVehicleAndMonth(vehicleId, year, month));
+        }
+
+        private T CallService<T>(Func<IVehicleRentalService, T> operation)
         {
             var factory = new ChannelFactory<IVehicleRentalService>("VehicleRentalServiceEndpoint");
             IVehicleRentalService channel = factory.CreateChannel();
             try
             {
-                List<RentalRecord> result = channel.GetRentalRecordsByVehicleAndMonth(vehicleId, year, month);
+                T result = operation(channel);
                 ((IClientChannel)channel).Close();
                 factory.Close();
                 return result;
             }
-            catch (CommunicationException)
-            {
-                ((IClientChannel)channel).Abort();
-                factory.Abort();
-                throw;
-            }
-            catch (TimeoutException)
-            {
-                ((IClientChannel)channel).Abort();
-                factory.Abort();
-                throw;
-            }
-            catch (Exception)
+            catch
             {
                 ((IClientChannel)channel).Abort();
                 factory.Abort();
