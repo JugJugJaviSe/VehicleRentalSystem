@@ -66,14 +66,14 @@ namespace VehicleRentalSystem.Component2.ViewModels
                 var records = _client.GetRentalRecordsByVehicleAndMonth(
                     _vehicleSelection.SelectedVehicle.Id, Year, Month);
 
-                var dict = _adapter.Adapt(records);
+                var dict = _adapter.AdaptToDictionary(records);
 
                 AdaptedGroups.Clear();
                 foreach (var kv in dict)
                 {
                     var first = kv.Value[0];
                     var recordsText = string.Join("; ", kv.Value.Select(
-                        r => $"[duration: {r.DurationDays} days, cost: {r.TotalCost:F2}, state: {r.State}]"));
+                        r => $"[duration: {r.DurationDays} days, cost: {r.TotalCost:F2} RSD, mileage: {r.MileageDriven:F2} km, state: {r.State}]"));
 
                     AdaptedGroups.Add(new AdaptedRentalRecordGroup
                     {

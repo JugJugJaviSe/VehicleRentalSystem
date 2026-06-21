@@ -5,6 +5,6 @@ namespace VehicleRentalSystem.Component2.Interfaces
 {
     public interface IRentalRecordAdapter
     {
-        Dictionary<string, List<RentalRecord>> Adapt(IEnumerable<RentalRecord> rentalRecords);
+        Dictionary<string, List<RentalRecord>> AdaptToDictionary(IEnumerable<RentalRecord> rentalRecords);
     }
 }
