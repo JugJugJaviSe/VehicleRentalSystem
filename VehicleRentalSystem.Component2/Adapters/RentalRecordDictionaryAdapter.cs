@@ -11,7 +11,7 @@ namespace VehicleRentalSystem.Component2.Adapters
             var result = new Dictionary<string, List<RentalRecord>>();
             foreach (var record in rentalRecords)
             {
-                var key = $"{record.VehicleId}-{record.RentalDate:yyyy-MM-dd HH:mm}";
+                var key = $"{record.VehicleId}-{record.RentalDate:yyyy-MM}";
                 if (!result.ContainsKey(key))
                 {
                     result[key] = new List<RentalRecord>();
