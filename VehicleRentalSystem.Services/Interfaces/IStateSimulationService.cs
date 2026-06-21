@@ -4,8 +4,10 @@ namespace VehicleRentalSystem.Services.Interfaces
 {
     public interface IStateSimulationService
     {
-        RentalState GetNextState(
+        bool CanChangeTo(
             RentalState currentState,
             RentalState requestedState);
+
+        bool BlocksVehicleAvailability(RentalState state);
     }
 }

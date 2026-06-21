@@ -5,15 +5,12 @@ namespace VehicleRentalSystem.Services.States
 {
     public class OverdueState : IRentalState
     {
-        public RentalState ChangeTo(RentalState requestedState)
-        {
-            if (requestedState == RentalState.Overdue
-                || requestedState == RentalState.Completed)
-            {
-                return requestedState;
-            }
+        public bool BlocksVehicleAvailability => true;
 
-            return RentalState.Overdue;
+        public bool CanChangeTo(RentalState requestedState)
+        {
+            return requestedState == RentalState.Overdue
+                || requestedState == RentalState.Completed;
         }
     }
 }

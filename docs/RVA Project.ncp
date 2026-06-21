@@ -173,7 +173,7 @@
         <Location left="534" top="1343" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
-        <Member type="Method">public RentalState ChangeTo(RentalState requestedState)</Member>
+        <Member type="Method">public RentalState CanChangeTo(RentalState requestedState)</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Class">
@@ -182,7 +182,7 @@
         <Location left="722" top="1343" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
-        <Member type="Method">public RentalState ChangeTo(RentalState requestedState)</Member>
+        <Member type="Method">public RentalState CanChangeTo(RentalState requestedState)</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Class">
@@ -191,7 +191,7 @@
         <Location left="1094" top="1343" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
-        <Member type="Method">public RentalState ChangeTo(RentalState requestedState)</Member>
+        <Member type="Method">public RentalState CanChangeTo(RentalState requestedState)</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Interface">
@@ -200,7 +200,8 @@
         <Location left="752" top="1047" />
         <Size width="309" height="216" />
         <Collapsed>False</Collapsed>
-        <Member type="Method">RentalState ChangeTo(RentalState requestedState)</Member>
+        <Member type="Method">RentalState CanChangeTo(RentalState requestedState)</Member>
+        <Member type="Property">bool BlocksVehicleAvailability { get; }</Member>
       </Entity>
       <Entity type="Class">
         <Name>CompletedState</Name>
@@ -208,16 +209,17 @@
         <Location left="911" top="1343" />
         <Size width="162" height="216" />
         <Collapsed>False</Collapsed>
-        <Member type="Method">public RentalState ChangeTo(RentalState requestedState)</Member>
+        <Member type="Method">public RentalState CanChangeTo(RentalState requestedState)</Member>
         <Modifier>None</Modifier>
       </Entity>
       <Entity type="Class">
         <Name>StateSimulationService</Name>
         <Access>Public</Access>
         <Location left="1155" top="1047" />
-        <Size width="278" height="216" />
+        <Size width="302" height="216" />
         <Collapsed>False</Collapsed>
-        <Member type="Method">public bool GetNextState(RentalState currentState, RentalState requestedState)</Member>
+        <Member type="Method">public bool CanChangeTo(RentalState currentState, RentalState requestState)</Member>
+        <Member type="Method">public bool BlocksVehicleAvailability(RentalState state)</Member>
         <Member type="Method">private IRentalState CreateState(RentalState state)</Member>
         <Modifier>None</Modifier>
       </Entity>
@@ -275,9 +277,20 @@
         <Collapsed>False</Collapsed>
         <Modifier>None</Modifier>
       </Entity>
+      <Entity type="Interface">
+        <Name>IStateSimulationService</Name>
+        <Access>Public</Access>
+        <Location left="1094" top="683" />
+        <Size width="397" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">bool CanChangeTo(RentalState currentState, RentalState requestState)</Member>
+        <Member type="Method">bool BlocksVehicleAvailability(RentalState state)</Member>
+      </Entity>
     </Entities>
     <Relationships>
       <Relationship type="Association" first="1" second="0">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <Direction>Unidirectional</Direction>
@@ -310,48 +323,36 @@
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
       <Relationship type="Association" first="5" second="8">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="6" second="8">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="7" second="8">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="2" second="9">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="3" second="9">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="4" second="9">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
@@ -406,24 +407,18 @@
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
       <Relationship type="Association" first="16" second="12">
-        <Label>
-        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="18" second="16">
-        <Label>
-        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Dependency" first="18" second="15">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -436,8 +431,6 @@
         </BendPoint>
       </Relationship>
       <Relationship type="Dependency" first="18" second="17">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -450,8 +443,6 @@
         </BendPoint>
       </Relationship>
       <Relationship type="Dependency" first="18" second="14">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -464,8 +455,6 @@
         </BendPoint>
       </Relationship>
       <Relationship type="Dependency" first="18" second="13">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -478,6 +467,8 @@
         </BendPoint>
       </Relationship>
       <Relationship type="Association" first="21" second="19">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <Direction>Unidirectional</Direction>
@@ -486,8 +477,6 @@
         <EndMultiplicity>0..*</EndMultiplicity>
       </Relationship>
       <Relationship type="Association" first="23" second="1">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="False">
@@ -498,8 +487,6 @@
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="23" second="18">
-        <Label>
-        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <Direction>Unidirectional</Direction>
@@ -510,8 +497,6 @@
         <EndOrientation>Horizontal</EndOrientation>
       </Relationship>
       <Relationship type="Association" first="23" second="21">
-        <Label>
-        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -522,8 +507,6 @@
         <AssociationType>Association</AssociationType>
       </Relationship>
       <Relationship type="Association" first="6" second="9">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="False">
@@ -532,6 +515,10 @@
         </BendPoint>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Realization" first="18" second="24">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
       </Relationship>
     </Relationships>
   </ProjectItem>

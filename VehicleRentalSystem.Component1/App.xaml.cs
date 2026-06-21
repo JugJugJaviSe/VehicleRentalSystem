@@ -37,8 +37,15 @@ namespace VehicleRentalSystem.Component1
             IVehicleRepository vehicleRepository = new VehicleRepository();
             IRentalRecordRepository rentalRecordRepository = new RentalRecordRepository();
 
-            IStateSimulationService stateSimulationService = new StateSimulationService();
             IRentalSubject rentalStatisticsSubject = new RentalStatisticsSubject();
+
+            IStateSimulationService stateSimulationService = new StateSimulationService();
+
+            IVehicleAvailabilityService vehicleAvailabilityService =
+                new VehicleAvailabilityService(
+                    vehicleRepository,
+                    rentalRecordRepository,
+                    stateSimulationService);
 
             CommandHistoryManager vehicleCommandHistoryManager =
                 new CommandHistoryManager();
@@ -66,6 +73,7 @@ namespace VehicleRentalSystem.Component1
                 persistenceService,
                 loggingService,
                 stateSimulationService,
+                vehicleAvailabilityService,
                 rentalStatisticsSubject,
                 vehicleCommandHistoryManager,
                 rentalCommandHistoryManager,

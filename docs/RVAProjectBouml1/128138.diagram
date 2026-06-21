@@ -1,0 +1,175 @@
+format 224
+
+classinstance 128010 class_ref 128266 // RentalManVM
+  name ""   xyz 6.6 4.6 2000 life_line_z 2000
+classinstance 128138 class_ref 129162 // VehicleAvailabilitySer
+  name ""   xyz 89.4 4.8 2000 life_line_z 2000
+classinstance 128650 class_ref 129290 // VehicleRepo
+  name ""   xyz 204 4.8 2000 life_line_z 2000
+classinstance 129802 class_ref 128906 // RRRepo
+  name ""   xyz 277.6 4.8 2000 life_line_z 2000
+classinstance 130570 class_ref 129418 // StateSimulationSer
+  name ""   xyz 333.4 4.8 2000 life_line_z 2000
+classinstance 131338 class_ref 129546 // ActiveState
+  name ""   xyz 440.6 4.8 2000 life_line_z 2000
+classinstance 133130 class_ref 129674 // Vehicle
+  name ""   xyz 512.4 4.8 2000 life_line_z 2000
+classinstance 133642 class_ref 128138 // MainW
+  name ""   xyz 564.6 4.8 2000 life_line_z 2000
+classinstance 134154 class_ref 129802 // VehicleManVM
+  name ""   xyz 615.8 4.8 2000 life_line_z 2000
+classinstance 134538 class_ref 129034 // JsonPersistenceSer
+  name ""   xyz 703 4.8 2000 life_line_z 2000
+fragment 135050 "loop"
+  xyzwh 92 182 2000 590 372
+end
+durationcanvas 128266 classinstance_ref 128010 // :RentalManVM
+  xyzwh 41 78 2010 11 587
+end
+durationcanvas 128394 classinstance_ref 128138 // :VehicleAvailabilitySer
+  xyzwh 141 70.8 2010 11 25
+end
+durationcanvas 128778 classinstance_ref 128138 // :VehicleAvailabilitySer
+  xyzwh 141 111.4 2010 11 41
+end
+durationcanvas 128906 classinstance_ref 128650 // :VehicleRepo
+  xyzwh 235 110.5 2010 11 27
+end
+durationcanvas 129162 classinstance_ref 128650 // :VehicleRepo
+  xyzwh 235 156.6 2010 11 27
+end
+durationcanvas 129290 classinstance_ref 128138 // :VehicleAvailabilitySer
+  xyzwh 141 155.5 2010 11 26
+end
+durationcanvas 129546 classinstance_ref 128138 // :VehicleAvailabilitySer
+  xyzwh 139 218.6 2010 11 202
+end
+durationcanvas 129930 classinstance_ref 129802 // :RRRepo
+  xyzwh 298 222.6 2010 11 25
+end
+durationcanvas 130186 classinstance_ref 129802 // :RRRepo
+  xyzwh 298 256.6 2010 11 26
+end
+durationcanvas 131082 classinstance_ref 130570 // :StateSimulationSer
+  xyzwh 379 289.4 2010 11 25
+end
+durationcanvas 131466 classinstance_ref 130570 // :StateSimulationSer
+  xyzwh 379 325.8 2010 11 34
+end
+durationcanvas 131594 classinstance_ref 131338 // :ActiveState
+  xyzwh 469 325.2 2010 11 27
+end
+durationcanvas 132490 classinstance_ref 131338 // :ActiveState
+  xyzwh 467 367.5 2010 11 33
+end
+durationcanvas 132618 classinstance_ref 130570 // :StateSimulationSer
+  xyzwh 379 367.3 2010 11 27
+end
+durationcanvas 132874 classinstance_ref 130570 // :StateSimulationSer
+  xyzwh 379 403.2 2010 11 41
+end
+durationcanvas 133258 classinstance_ref 128138 // :VehicleAvailabilitySer
+  xyzwh 139 462.9 2010 11 35
+end
+durationcanvas 133386 classinstance_ref 133130 // :Vehicle
+  xyzwh 531 462.7 2010 11 28
+end
+durationcanvas 133770 classinstance_ref 133130 // :Vehicle
+  xyzwh 531 507.8 2010 11 41
+end
+durationcanvas 133898 classinstance_ref 133642 // :MainW
+  xyzwh 583 506.9 2010 11 27
+end
+durationcanvas 134282 classinstance_ref 134154 // :VehicleManVM
+  xyzwh 652 571.6 2010 11 26
+end
+durationcanvas 134666 classinstance_ref 134154 // :VehicleManVM
+  xyzwh 652 607.4 2010 11 40
+end
+durationcanvas 134794 classinstance_ref 134538 // :JsonPersistenceSer
+  xyzwh 750 606.5 2010 11 26
+end
+msg 128522 synchronous
+  from durationcanvas_ref 128266
+  to durationcanvas_ref 128394
+  yz 76 2015 explicitmsg "SynchronizeAvailability()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 38 57
+msg 129034 synchronous
+  from durationcanvas_ref 128778
+  to durationcanvas_ref 128906
+  yz 110 2015 explicitmsg "GetAll()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 175 98
+msg 129418 return
+  from durationcanvas_ref 129162
+  to durationcanvas_ref 129290
+  yz 155 2015 explicitmsg "vehicles"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 175 143
+reflexivemsg 129674 synchronous
+  to durationcanvas_ref 129546
+  yz 218 2015 explicitmsg "IsVehicleAvailable(vehicleId)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 112 205
+msg 130058 synchronous
+  from durationcanvas_ref 129546
+  to durationcanvas_ref 129930
+  yz 237 2015 explicitmsg "GetAll()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 208 226
+msg 130314 return
+  from durationcanvas_ref 130186
+  to durationcanvas_ref 129546
+  yz 272 2015 explicitmsg "rentalRecords"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 192 260
+msg 131210 synchronous
+  from durationcanvas_ref 129546
+  to durationcanvas_ref 131082
+  yz 293 2015 explicitmsg "BlocksVehicleAvailability(Active)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 192 283
+msg 131722 synchronous
+  from durationcanvas_ref 131466
+  to durationcanvas_ref 131594
+  yz 324 2015 explicitmsg "BlocksVehicleAvailability"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 376 312
+msg 132746 return
+  from durationcanvas_ref 132490
+  to durationcanvas_ref 132618
+  yz 367 2015 explicitmsg "true"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 422 356
+msg 133002 return
+  from durationcanvas_ref 132874
+  to durationcanvas_ref 129546
+  yz 402 2015 explicitmsg "true"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 257 390
+msg 133514 synchronous
+  from durationcanvas_ref 133258
+  to durationcanvas_ref 133386
+  yz 462 2015 explicitmsg "IsAvailable = false"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 298 450
+msg 134026 synchronous
+  from durationcanvas_ref 133770
+  to durationcanvas_ref 133898
+  yz 506 2015 explicitmsg "PropertyChanged(IsAvailable)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 490 495
+msg 134410 synchronous
+  from durationcanvas_ref 128266
+  to durationcanvas_ref 134282
+  yz 571 2015 explicitmsg "SaveVehicles()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 318 560
+msg 134922 synchronous
+  from durationcanvas_ref 134666
+  to durationcanvas_ref 134794
+  yz 605 2015 explicitmsg "SaveVehicles(vehicles)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 653 593
+end

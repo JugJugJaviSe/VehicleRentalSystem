@@ -5,9 +5,11 @@ namespace VehicleRentalSystem.Services.States
 {
     public class CancelledState : IRentalState
     {
-        public RentalState ChangeTo(RentalState requestedState)
+        public bool BlocksVehicleAvailability => false;
+
+        public bool CanChangeTo(RentalState requestedState)
         {
-            return RentalState.Cancelled;
+            return requestedState == RentalState.Cancelled;
         }
     }
 }

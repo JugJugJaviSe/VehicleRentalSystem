@@ -4,6 +4,8 @@ namespace VehicleRentalSystem.Services.Interfaces
 {
     public interface IRentalState
     {
-        RentalState ChangeTo(RentalState requestedState);
+        bool CanChangeTo(RentalState requestedState);
+
+        bool BlocksVehicleAvailability { get; }
     }
 }

@@ -8,7 +8,6 @@ using System.Windows.Data;
 using VehicleRentalSystem.Component1.Commands;
 using VehicleRentalSystem.Component1.Helpers;
 using VehicleRentalSystem.Component1.Views;
-using VehicleRentalSystem.Models.Enums;
 using VehicleRentalSystem.Models.Models;
 using VehicleRentalSystem.Services.Commands;
 using VehicleRentalSystem.Services.Interfaces;
@@ -22,6 +21,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
         private readonly IRentalRecordRepository _rentalRecordRepository;
         private readonly IPersistenceService _persistenceService;
         private readonly ILoggingService _loggingService;
+        private readonly IStateSimulationService _stateSimulationService;
         private readonly CommandHistoryManager _commandHistoryManager;
         private readonly string _vehiclesFilePath;
         private Action _refreshRentalRecords;
@@ -75,12 +75,14 @@ namespace VehicleRentalSystem.Component1.ViewModels
             IRentalRecordRepository rentalRecordRepository,
             IPersistenceService persistenceService,
             ILoggingService loggingService,
+            IStateSimulationService stateSimulationService,
             CommandHistoryManager commandHistoryManager,
             string vehiclesFilePath)
         {
             _vehicleRepository = vehicleRepository;
             _rentalRecordRepository = rentalRecordRepository;
             _persistenceService = persistenceService;
+            _stateSimulationService = stateSimulationService;
             _loggingService = loggingService;
             _commandHistoryManager = commandHistoryManager;
             _vehiclesFilePath = vehiclesFilePath;
@@ -207,9 +209,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 .Where(rentalRecord => rentalRecord.VehicleId == vehicle.Id)
                 .ToList();
 
-            bool hasUnfinishedRental = relatedRentalRecords.Any(rentalRecord =>
-                rentalRecord.State == RentalState.Active
-                || rentalRecord.State == RentalState.Overdue);
+            bool hasUnfinishedRental = relatedRentalRecords.Any(rentalRecord => _stateSimulationService.BlocksVehicleAvailability(rentalRecord.State));
 
             if (hasUnfinishedRental)
             {

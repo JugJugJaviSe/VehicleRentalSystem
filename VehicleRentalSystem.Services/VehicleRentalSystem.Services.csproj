@@ -57,6 +57,7 @@
     <Compile Include="Interfaces\IRentalState.cs" />
     <Compile Include="Interfaces\IStateSimulationService.cs" />
     <Compile Include="Interfaces\IUndoableCommand.cs" />
+    <Compile Include="Interfaces\IVehicleAvailabilityService.cs" />
     <Compile Include="Interfaces\IVehicleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RentalRecordRepository.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Services\JsonPersistenceService.cs" />
     <Compile Include="Services\LoggingService.cs" />
     <Compile Include="Services\StateSimulationService.cs" />
+    <Compile Include="Services\VehicleAvailabilityService.cs" />
     <Compile Include="States\ActiveState.cs" />
     <Compile Include="States\CancelledState.cs" />
     <Compile Include="States\CompletedState.cs" />

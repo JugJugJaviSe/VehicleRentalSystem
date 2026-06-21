@@ -7,12 +7,18 @@ namespace VehicleRentalSystem.Services.Services
 {
     public class StateSimulationService : IStateSimulationService
     {
-        public RentalState GetNextState(
+        public bool CanChangeTo(
             RentalState currentState,
             RentalState requestedState)
         {
             IRentalState state = CreateState(currentState);
-            return state.ChangeTo(requestedState);
+            return state.CanChangeTo(requestedState);
+        }
+
+        public bool BlocksVehicleAvailability(RentalState state)
+        {
+            IRentalState rentalState = CreateState(state);
+            return rentalState.BlocksVehicleAvailability;
         }
 
         private IRentalState CreateState(RentalState state)
@@ -21,12 +27,16 @@ namespace VehicleRentalSystem.Services.Services
             {
                 case RentalState.Active:
                     return new ActiveState();
+
                 case RentalState.Overdue:
                     return new OverdueState();
+
                 case RentalState.Completed:
                     return new CompletedState();
+
                 case RentalState.Cancelled:
                     return new CancelledState();
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state));
             }

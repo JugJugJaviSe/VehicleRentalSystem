@@ -16,6 +16,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
             IPersistenceService persistenceService,
             ILoggingService loggingService,
             IStateSimulationService stateSimulationService,
+            IVehicleAvailabilityService vehicleAvailabilityService,
             IRentalSubject rentalStatisticsSubject,
             CommandHistoryManager vehicleCommandHistoryManager,
             CommandHistoryManager rentalCommandHistoryManager,
@@ -28,6 +29,7 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 rentalRecordRepository,
                 persistenceService,
                 loggingService,
+                stateSimulationService,
                 vehicleCommandHistoryManager,
                 vehiclesFilePath);
 
@@ -39,8 +41,8 @@ namespace VehicleRentalSystem.Component1.ViewModels
                 rentalCommandHistoryManager,
                 rentalStatisticsSubject,
                 vehicleRepository,
+                vehicleAvailabilityService,
                 VehicleManagement.SaveVehicles,
-                VehicleManagement.RefreshVehicles,
                 rentalRecordsFilePath);
 
             Statistics = new StatisticsViewModel(RentalManagement.RentalRecords);
