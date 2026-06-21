@@ -1,34 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.ServiceModel;
 using System.Windows.Input;
 using VehicleRentalSystem.Component2.Commands;
 using VehicleRentalSystem.Component2.Interfaces;
-using VehicleRentalSystem.Component2.Services;
 using VehicleRentalSystem.Models.Models;
 
 namespace VehicleRentalSystem.Component2.ViewModels
 {
     public class RentalRecordsViewModel : BaseViewModel, IRentalRecordsSubject
     {
-        private readonly IVehicleRentalClient _client;
-        private readonly IRentalRecordAdapter _adapter;
+        private readonly IRentalRecordLoadService _loadService;
+        private readonly IRentalRecordCache _cache;
+        private readonly IRentalRecordGroupViewModelFactory _groupFactory;
         private readonly VehicleSelectionViewModel _vehicleSelection;
         private readonly List<IRentalRecordsObserver> _observers = new List<IRentalRecordsObserver>();
-        private IReadOnlyList<RentalRecord> _lastLoadedRecords = new List<RentalRecord>();
         private int _year = DateTime.Now.Year;
         private int _month = DateTime.Now.Month;
         private string _statusMessage;
-        private string _resultVehicleId;
-        private string _resultRentalPeriod;
-        private int _resultRecordCount;
 
-        public ObservableCollection<RentalRecord> DisplayedRecords { get; }
-            = new ObservableCollection<RentalRecord>();
-
-        public IReadOnlyList<RentalRecord> LastLoadedRecords => _lastLoadedRecords;
+        public ObservableCollection<RentalRecordGroupViewModel> DisplayedGroups { get; }
+            = new ObservableCollection<RentalRecordGroupViewModel>();
 
         public int Year
         {
@@ -48,35 +41,22 @@ namespace VehicleRentalSystem.Component2.ViewModels
             set { _statusMessage = value; OnPropertyChanged(); }
         }
 
-        public string ResultVehicleId
-        {
-            get => _resultVehicleId;
-            set { _resultVehicleId = value; OnPropertyChanged(); }
-        }
-
-        public string ResultRentalPeriod
-        {
-            get => _resultRentalPeriod;
-            set { _resultRentalPeriod = value; OnPropertyChanged(); }
-        }
-
-        public int ResultRecordCount
-        {
-            get => _resultRecordCount;
-            set { _resultRecordCount = value; OnPropertyChanged(); }
-        }
-
         public ICommand LoadRentalRecordsCommand { get; }
 
+        public ICommand ClearRentalRecordsCommand { get; }
+
         public RentalRecordsViewModel(
-            IVehicleRentalClient client,
-            IRentalRecordAdapter adapter,
+            IRentalRecordLoadService loadService,
+            IRentalRecordCache cache,
+            IRentalRecordGroupViewModelFactory groupFactory,
             VehicleSelectionViewModel vehicleSelection)
         {
-            _client = client;
-            _adapter = adapter;
+            _loadService = loadService;
+            _cache = cache;
+            _groupFactory = groupFactory;
             _vehicleSelection = vehicleSelection;
             LoadRentalRecordsCommand = new RelayCommand(_ => LoadRentalRecords());
+            ClearRentalRecordsCommand = new RelayCommand(_ => ClearRentalRecords());
         }
 
         public void Attach(IRentalRecordsObserver observer)
@@ -91,8 +71,9 @@ namespace VehicleRentalSystem.Component2.ViewModels
 
         public void NotifyObservers()
         {
+            var allRecords = _cache.GetAllRecords();
             foreach (var observer in _observers)
-                observer.OnRentalRecordsLoaded(_lastLoadedRecords);
+                observer.OnRentalRecordsLoaded(allRecords);
         }
 
         private void LoadRentalRecords()
@@ -105,30 +86,24 @@ namespace VehicleRentalSystem.Component2.ViewModels
 
             try
             {
-                var records = _client.GetRentalRecordsByVehicleAndMonth(
-                    _vehicleSelection.SelectedVehicle.Id, Year, Month).ToList();
+                var vehicleId = _vehicleSelection.SelectedVehicle.Id;
 
-                _lastLoadedRecords = records;
+                var entry = _loadService.Load(vehicleId, Year, Month);
 
-                var dict = _adapter.AdaptToDictionary(records);
-
-                ResultVehicleId = _vehicleSelection.SelectedVehicle.Id.ToString();
-                ResultRentalPeriod = $"{Year:D4}-{Month:D2}";
-
-                DisplayedRecords.Clear();
-
-                var entry = dict.Values.FirstOrDefault();
-                if (entry != null)
+                if (entry.Value.Count == 0)
                 {
-                    foreach (var record in entry)
-                    {
-                        DisplayedRecords.Add(record);
-                    }
+                    _cache.Remove(vehicleId, Year, Month);
+                    RefreshDisplayedGroups();
+                    NotifyObservers();
+                    StatusMessage = "No rental records found for selected vehicle and month.";
+                    return;
                 }
 
-                ResultRecordCount = DisplayedRecords.Count;
-                StatusMessage = $"Loaded {ResultRecordCount} record(s).";
+                _cache.AddOrUpdate(entry.Key, entry.Value);
+                RefreshDisplayedGroups();
                 NotifyObservers();
+
+                StatusMessage = $"Loaded {entry.Value.Count} record(s).";
             }
             catch (CommunicationException ex)
             {
@@ -141,6 +116,23 @@ namespace VehicleRentalSystem.Component2.ViewModels
             catch (Exception ex)
             {
                 StatusMessage = $"Error: {ex.Message}";
+            }
+        }
+
+        private void ClearRentalRecords()
+        {
+            _cache.Clear();
+            RefreshDisplayedGroups();
+            NotifyObservers();
+            StatusMessage = "Displayed rental records cleared.";
+        }
+
+        private void RefreshDisplayedGroups()
+        {
+            DisplayedGroups.Clear();
+            foreach (var group in _cache.GetGroups())
+            {
+                DisplayedGroups.Add(_groupFactory.Create(group));
             }
         }
     }
