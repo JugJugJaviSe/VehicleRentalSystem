@@ -13,30 +13,49 @@ namespace VehicleRentalSystem.Component2
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            var realClient = new VehicleRentalClient();
-            var client = new FallbackVehicleRentalClient(realClient);
-            var vehicleSelection = new VehicleSelectionViewModel(client);
-            var adapter = new RentalRecordDictionaryAdapter();
-            var cache = new RentalRecordCache();
-            var loadService = new RentalRecordLoadService(client, adapter);
-            var groupFactory = new RentalRecordGroupViewModelFactory();
-            var strategies = new List<IRentalStatisticStrategy>
+
+            IVehicleRentalClient realClient = new VehicleRentalClient();
+            IVehicleRentalClient client = new FallbackVehicleRentalClient(realClient);
+
+            VehicleSelectionViewModel vehicleSelection = new VehicleSelectionViewModel(client);
+
+            IRentalRecordAdapter adapter = new RentalRecordDictionaryAdapter();
+            IRentalRecordCache cache = new RentalRecordCache();
+            IRentalRecordLoadService loadService = new RentalRecordLoadService(client, adapter);
+
+            IRentalRecordGroupViewModelFactory groupFactory = new RentalRecordGroupViewModelFactory();
+
+            List<IRentalStatisticStrategy> strategies = new List<IRentalStatisticStrategy>
             {
                 new AverageDurationStrategy(),
                 new MaxMileageStrategy(),
                 new OverdueCountStrategy()
             };
-            var exportService = new CsvRentalStatisticExportService();
-            var saveFileDialogService = new SaveFileDialogService();
 
-            var rentalRecords = new RentalRecordsViewModel(loadService, cache, groupFactory, vehicleSelection);
-            var rentalStatistics = new RentalStatisticsViewModel(strategies, exportService, saveFileDialogService);
+            IRentalStatisticExportService exportService = new CsvRentalStatisticExportService();
+            ISaveFileDialogService saveFileDialogService = new SaveFileDialogService();
+
+            RentalRecordsViewModel rentalRecords = new RentalRecordsViewModel(
+                loadService,
+                cache,
+                groupFactory,
+                vehicleSelection);
+
+            RentalStatisticsViewModel rentalStatistics = new RentalStatisticsViewModel(
+                strategies,
+                exportService,
+                saveFileDialogService);
 
             rentalRecords.Attach(rentalStatistics);
 
-            var mainViewModel = new MainViewModel(vehicleSelection, rentalRecords, rentalStatistics);
-            var mainWindow = new MainWindow(mainViewModel);
+            MainViewModel mainViewModel = new MainViewModel(
+                vehicleSelection,
+                rentalRecords,
+                rentalStatistics);
+
+            MainWindow mainWindow = new MainWindow(mainViewModel);
             mainWindow.Show();
         }
     }
 }
+
